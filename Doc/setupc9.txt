@@ -35,3 +35,22 @@ Name: STM32 Builder
 When building, select the FreeVario Folder
 
 
+Using git
+
+#set email (see your profile for noreply email)
+
+git config --global user.email "ID+username@users.noreply.github.com"
+
+#update from master
+git pull origin master
+
+#add new files
+git add . 
+
+#Commit
+git commit -m "Commit descritpion"
+
+#Push
+git push -u origin master
+
+
