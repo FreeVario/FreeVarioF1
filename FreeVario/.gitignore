@@ -1,0 +1,6 @@
+.mbed
+mbed-os
+BUILD
+img
+mbed-os.lib
+mbed_settings.*
