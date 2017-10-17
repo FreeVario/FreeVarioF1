@@ -14,9 +14,11 @@ Install MBED cli
 sudo pip install mbed-cli
 sudo pip install markupsafe
 
+cd FreeVario
+run "mbed deploy" to install mbed
+
 You can install all missing modules by running "pip install -r requirements.txt" in "/home/ubuntu/workspace/FreeVario/mbed-os"
 
-Use "mbed deploy" to test if all modules are available
 
 Create build command
 
@@ -52,5 +54,4 @@ git commit -m "Commit descritpion"
 
 #Push
 git push -u origin master
-
 
