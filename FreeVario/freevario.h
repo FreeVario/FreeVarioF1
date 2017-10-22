@@ -8,15 +8,22 @@
   any later version. see <http://www.gnu.org/licenses/>
 */
 
+#ifndef FREEVARIO_H
+#define FREEVARIO_H
+
 #include <vector>
 #include <numeric>
 #include "BufferedSerial.h"
+#include "conf.h"
 
 void sendSensorData();
 void setupSerial();
 void readSensor();
 void queueData();
-extern BufferedSerial pc;
-extern std::vector<char> sendBuffer;
-extern std::vector<float> vario;
-extern std::vector<float> altitude;
+void sendSerial(char *message);
+extern bool takeoff;
+extern Serial pc;
+
+
+
+#endif

@@ -7,14 +7,14 @@
   the Free Software Foundation, either version 3 of the License, or
   any later version. see <http://www.gnu.org/licenses/>
 */
+#ifndef ACCELEROMETER_H
+#define ACCELEROMETER_H
 
-#ifndef GPSRUNNER_H
-#define GPSRUNNER_H
 
-void Rx_GPS();
-void setupGPS();
-void sendGPSline();
-bool gpsHasNewLine();
-void GPSstuff(char c);
+void setupAccl();
+void readAccl();
+
+extern float accl[3];
+extern float gyro[3];
 
 #endif

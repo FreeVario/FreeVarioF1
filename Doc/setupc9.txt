@@ -38,6 +38,7 @@ When building, select the FreeVario Folder
 
 
 Using git
+cd ~/workspace
 
 #set email (see your profile for noreply email)
 

@@ -15,7 +15,10 @@
 #include <numeric>
 #include "BufferedSerial.h"
 
-Serial SerialGPS(GPSTX, GPSRX); 
+BufferedSerial SerialGPS(GPSTX, GPSRX); 
+
+#define GPSBUFFER 120
+static char GPSbuffer[GPSBUFFER];
 
 volatile bool gps_newline = false;
 // Circular buffers for serial TX and RX data - used by interrupt routines
@@ -31,7 +34,7 @@ volatile int rx_out=0;
 
 // Interupt Routine to read in data from serial port
 void Rx_GPS() {
-   
+   /*
     while ((SerialGPS.readable()) && (((rx_in + 1) % buffer_size) != rx_out)) {
         rx_buffer[rx_in] = SerialGPS.getc();
         if (rx_buffer[rx_in] == 0x0d) {
@@ -46,10 +49,44 @@ void Rx_GPS() {
         sendGPSline();
         gps_newline = false;
     }
-    
-   
+    */
+   while (SerialGPS.readable()) {
+       GPSstuff(SerialGPS.getc());
+   }
     return;
 }
+
+
+void GPSstuff(char c) {                                         // GPSbuffer[] is global
+  static int i;                                              //   persistent within function scope
+  static char q;
+  static uint8_t flag = false;
+                                    // GPS serial line input buffer
+  
+  q = c;
+
+  if ( q == 0x24 )                                              // '$'
+  {
+    i = 0;                                                      // brute force sync on '$' to GPSbuffer[0]
+    // Serial << "Found $" << endl;
+  }
+
+  if ( i < GPSBUFFER) GPSbuffer[i++] = q;
+
+  if (q == 0x0d) {
+    flag = true;                                                // is the character a CR for eol
+    GPSbuffer[i++] = '\0';
+    i = 0;
+  }
+
+  if (flag) {                                                   // test for end of line and if the right GPSbuffer
+    flag = false;                                               // reset for next time
+    pc.printf("%s\r\n", GPSbuffer);
+
+    memset(GPSbuffer, 0, sizeof(GPSbuffer));
+  }
+}
+
 
 
 void sendGPSline() {
@@ -57,38 +94,38 @@ void sendGPSline() {
     int i;
     i = 0;
    
-// Start Critical Section - don't interrupt while changing global buffer variables
-    NVIC_DisableIRQ(GPS_IRQ); //have to test if interupting with readsensors
-// Loop reading rx buffer characters until end of line character
-    while ((i==0) || (rx_line[i-1] != 0x0d)) {
- //Wait if buffer empty
+// Start Critical Section 
+   // NVIC_DisableIRQ(GPS_IRQ); //have to test if interupting with readsensors
+
+    while ((i==0) || (GPSbuffer[i-1] != 0x0d)) {
+
         if (rx_in == rx_out) {
 // End Critical Section - need to allow rx interrupt to get new characters for buffer
-            NVIC_EnableIRQ(GPS_IRQ);
+         //   NVIC_EnableIRQ(GPS_IRQ);
             while (rx_in == rx_out) {
             }
 // Start Critical Section - don't interrupt while changing global buffer variables
-            NVIC_DisableIRQ(GPS_IRQ);
+         //   NVIC_DisableIRQ(GPS_IRQ);
        }
-        rx_line[i] = rx_buffer[rx_out];
+        GPSbuffer[i] = rx_buffer[rx_out];
          
         i++;
         rx_out = (rx_out + 1) % buffer_size;
     }
-    pc.printf("%s", rx_line);
+    pc.printf("%s", GPSbuffer);
  
 
     
 // End Critical Section
-   NVIC_EnableIRQ(GPS_IRQ);
+ //  NVIC_EnableIRQ(GPS_IRQ);
     
-    memset(rx_line, 0, sizeof(rx_line));
+    //memset(rx_line, 0, sizeof(rx_line));
     return;
 }
 
 void setupGPS() {
     SerialGPS.baud(SERIALGPSBAUD);
-    SerialGPS.attach(&Rx_GPS, Serial::RxIrq);
+ //   SerialGPS.attach(&Rx_GPS, Serial::RxIrq);
 }
 
 bool gpsHasNewLine() {

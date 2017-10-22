@@ -7,7 +7,8 @@
   the Free Software Foundation, either version 3 of the License, or
   any later version. see <http://www.gnu.org/licenses/>
 */
-
+#ifndef CONFIG_H
+#define CONFIG_H
 
 /////////////////////////////
 // MCU type
@@ -58,7 +59,7 @@
    Adative vario will automatacally adjust the lowpass filter by changing setting conf.variosmooth.
    It does it by detecting "triggers".
 */
-#define ADAPTIVEVARIO //Adapts the vario low pass filter 
+//#define ADAPTIVEVARIO //Adapts the vario low pass filter 
 
 #define ACCLREADMS 100 //how often to read the accelerom
 #define ACCLSMOOTH 10 //Lowpass filter level
@@ -72,14 +73,15 @@
 /////////////////////////////////////////////////////////////////////
 #if defined(STM32F1GENERIC)
 
+
 //#define CONFIGOPT //enable configuration option (EEPROM required)
 //#define I2CEEPROM 0x50 ////External I2C EEPROM, required if using CONFIGOPT on STM32F 
 //#define I2CEEPROMPAGE 64 // page size of EEPROM 128 for 512
 
 #define LEDPIN PC13 // PC13 - blue pill
 
-#define SERIAL_CONFIG Serial //the serial port for remote config options
-#define SERIAL_CONFIG_BAUD  115200 //only define if SERIAL_CONFIG uses it's own port
+//#define SERIAL_CONFIG Serial //the serial port for remote config options
+//#define SERIAL_CONFIG_BAUD  115200 //only define if SERIAL_CONFIG uses it's own port
 
 
 //SerialOut means data will be sent from that port. It needs to be set to a harware serial port.
@@ -115,12 +117,13 @@
 //#define WIFIPASSWORD "thereisnospoon"
 
 #define DHTH //Curren lib autodetect sensor
-#define DHT_PIN PB1
-#define DHTOFFSET 0 //calibrate sensor
+#define DHTTYPE 11
+#define DHT_PIN PB_1
 
 
-//#define ACCL
 
+#define ACCL 
+#define MPU6050_ADDRESS  0x68 //do a complete clean recompile when changing
 
 /* set HC-05 in sleep mode (via BTPINENABLE) after startup
   if the stop command is sent during startup, it will delay the sleep mode
@@ -148,6 +151,8 @@
 /////////////////////////////////////////////////////////////////////
 
 #elif defined(FREEVARIOF103)
+
+
 #define CONFIGOPT //enable configuration option (EEPROM required)
 #define I2CEEPROM 0x50 ////External I2C EEPROM, required if using  CONFIGOPT on STM32F
 #define I2CEEPROMPAGE 256 // page size of EEPROM 128 for 512k. 64 for 256k
@@ -178,7 +183,7 @@
 #define GPS
 #define SERIALGPSBAUD 9600
 #define VARIO
-//#define VARIO2 //if 2nd vario
+#define VARIO2 //if 2nd vario
 
 #define BAROADDR 0x76
 #define BAROADDR2 0x77
@@ -194,11 +199,12 @@
 //#define WIFIPASSWORD "thereisnospoon"
 
 #define DHTH //ACCL rewuired i.c.w. cprobe
-#define DHT_PIN PB1
-#define DHTOFFSET 0 //calibrate sensor
+#define DHT_PIN PB_1
 
 
-#define ACCL  
+
+#define ACCL   
+ #define MPU6050_ADDRESS  0x69 //do a clean then recompile if changed
 
 /* set HC-05 in sleep mode (via BTPINENABLE) after startup
   if the stop command is sent during startup, it will delay the sleep mode
@@ -218,3 +224,4 @@
 
 #endif
 
+#endif
