@@ -20,7 +20,7 @@
 #include "barosensor.h"
 #include "accelerometer.h"
 #include "nmea.h"
-#include "DHT.h"
+#include "humidity.h"
 
 //debug section
 //int d = 0;
@@ -42,9 +42,6 @@ Timer t_slowreadsensor; //1 sec
 
 nmea nmea;
 
-#if defined(DHTH)
-DHT dht(DHT_PIN, DHTTYPE);
-#endif
 
 //----------------------------------------------------------------------------//
 // Runtime Variables
@@ -52,8 +49,7 @@ DHT dht(DHT_PIN, DHTTYPE);
 
 uint8_t sensorToken = 0; 
 
-int dhttemperature = 0;
-int dhthumidity = 0;
+
 
 //----------------------------------------------------------------------------//
 // Functions
@@ -83,7 +79,7 @@ void sendSensorData() {
   
 #if defined(ACCL) && defined(DHTH) // kind of a requirement
   
-   nmea.setNmeaPcProbeSentence(float((accl[0] * 1000) / 2048)/1000 , float((accl[1] * 1000) / 2048)/1000, float((accl[2] * 1000) / 2048)/1000, dhttemperature, dhthumidity, 0);
+   nmea.setNmeaPcProbeSentence(float((accl[0] * 1000) / 2048)/1000 , float((accl[1] * 1000) / 2048)/1000, float((accl[2] * 1000) / 2048)/1000, dhttemperature * 10, dhthumidity * 10, 0);
    sendSerial(nmea.nmeaPcProbe);
 #else
 #if defined(ACCL)
@@ -102,11 +98,9 @@ void sendSerial(char *message){
 void slowReadSensors(){
     
 #if defined(DHTH)
-    dht.readData();
-    pc.printf("\r\n\r\n\r\nHumid %i \r\n\r\n\r\n",int(dht.ReadHumidity()));
-    dhttemperature = realTemp *10; 
-    dhthumidity = dht.ReadHumidity() *10;
-    realTemp = dht.ReadTemperature(CELCIUS);
+    readHumid();
+    realTemp = dhttemperature;
+     pc.printf("%i \r\n", int(dhthumidity));
     
 #else
     readTemp(); //expensive process call
@@ -157,7 +151,7 @@ int main() {
     
     while (true) {
       
-    //   Rx_GPS();
+       Rx_GPS();
         
         if (t_sendata.read_ms() >= 100) {
             t_sendata.reset();

@@ -48,14 +48,15 @@ int DHT::readData() {
     unsigned int bitTimes[DHT_DATA_BIT_COUNT];
 
     eError err = ERROR_NONE;
-    time_t currentTime = time(NULL);
+  //  time_t currentTime = time(NULL);
 
     DigitalInOut DHT_io(_pin);
 
     for (i = 0; i < DHT_DATA_BIT_COUNT; i++) {
         bitTimes[i] = 0;
     }
-
+    
+/* causing problems if time not working well.
     if (!_firsttime) {
         if (int(currentTime - _lastReadTime) < 2) {
             err = ERROR_NO_PATIENCE;
@@ -65,8 +66,9 @@ int DHT::readData() {
         _firsttime=false;
         _lastReadTime=currentTime;
     }
+    */
     retryCount = 0;
-
+    
     do {
         if (retryCount > 125) {
             err = BUS_BUSY;
@@ -135,7 +137,7 @@ int DHT::readData() {
     }
 
     if (DHT_data[4] == ((DHT_data[0] + DHT_data[1] + DHT_data[2] + DHT_data[3]) & 0xFF)) {
-        _lastReadTime = currentTime;
+     //   _lastReadTime = currentTime;
         _lastTemperature=CalcTemperature();
         _lastHumidity=CalcHumidity();
 

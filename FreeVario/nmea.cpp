@@ -249,7 +249,7 @@ void nmea::setNmeaPcProbeSentence(float aax, float aay, float aaz, int temperatu
   
   getCRC(t_nmeaPcProbe);
 
-  sprintf(t_nmeaPcProbe + strlen(t_nmeaPcProbe),"%s,",t_check);
+  sprintf(t_nmeaPcProbe + strlen(t_nmeaPcProbe),"%s",t_check);
   strcpy(nmeaPcProbe, t_nmeaPcProbe);
 
 
