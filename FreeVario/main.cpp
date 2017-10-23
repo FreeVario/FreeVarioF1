@@ -100,7 +100,7 @@ void slowReadSensors(){
 #if defined(DHTH)
     readHumid();
     realTemp = dhttemperature;
-     pc.printf("%i \r\n", int(dhthumidity));
+     
     
 #else
     readTemp(); //expensive process call
@@ -148,6 +148,7 @@ int main() {
     t_readsensor.start();
     t_slowreadsensor.start();
     
+    set_time(1256729737); //set the time, otherwise the time function fails
     
     while (true) {
       
@@ -169,11 +170,11 @@ int main() {
             
         }  
         
-         if (t_slowreadsensor.read_ms() >= 1000) {
+         if (t_slowreadsensor.read_ms() >= 2000) {
            t_slowreadsensor.reset();
             
             slowReadSensors();
-          
+         
             
         } 
         
