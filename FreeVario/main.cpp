@@ -21,6 +21,7 @@
 #include "accelerometer.h"
 #include "nmea.h"
 #include "humidity.h"
+#include "audio.h"
 
 //debug section
 //int d = 0;
@@ -111,25 +112,24 @@ void slowReadSensors(){
 //Not using interupts as it interferes with i2c callbacks
 // 3x 10ms = 30ms per item
 void readSensor() {
-    
+   sensorToken++; 
    switch(sensorToken) {
       
-        case 0:
+        case 1:
              readBaro();
         break;
-        case 1:
+        case 2:
              readAccl();
         break;
-        case 2:
-            //reserved
-            
+        case 3:
+         //    makeVarioAudio(currentVarioFts * 0.3048);
         break;
         
     }
     
-    sensorToken++;
     
-    if (sensorToken >= 2) {
+    
+    if (sensorToken >= 3) {
         sensorToken = 0;
     }
     

@@ -50,6 +50,7 @@
 #define BUZZERVARIOSTOP 10000 //time vario STOP making noise when climbrate 0 m/s 
 //#define TESTBUZZER  //simulate the vario sound for testing only (Carefull, you might go mad)
 #define OUTOFTHERMALBUZZT 3000 //time buzzer goes buuhhhhh
+#define BUZZVOLUME 0.1 //0.5 is highest
 
 #define VARIO2LEASTDEV //base dual vario on least deviation
 #define PTASAVERAGE //include vario avarage in ptas sentence (ignored by XCSoar)
@@ -139,7 +140,7 @@
 
 
 #define BUZZER //let's go beep
-#define BUZZPIN PB0 //board pin 
+#define BUZZPIN PB_0 //board pin 
 
 
 
@@ -219,7 +220,7 @@
 */
 
 #define BUZZER //let's go beep
-#define BUZZPIN PB0 //board pin 
+#define BUZZPIN PB_0 //board pin 
 
 
 #endif
