@@ -24,6 +24,8 @@ static void setup() {
 
 static void loop() {
 
+	HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
+
 	HAL_Delay(100);
 
 }

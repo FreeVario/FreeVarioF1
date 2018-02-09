@@ -12,7 +12,8 @@
 #define CONFIG_HAL_H_
 #include "stm32f3xx_hal.h"
 
-#define FV_LED pin1a
+#define FV_LED LD10_Pin
+#define FV_LED_GPIO	GPIOE
 
 #define FV_I2C1 hi2c1
 
