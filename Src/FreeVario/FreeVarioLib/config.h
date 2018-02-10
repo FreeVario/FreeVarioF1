@@ -7,7 +7,7 @@
 
 #ifndef CONFIG_H_
 #define CONFIG_H_
-#include "config_hal.h"
+#include "../Src/config_hal.h"
 
 
 #endif /* CONFIG_H_ */
