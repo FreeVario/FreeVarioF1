@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
-<ProjectName>/media/marco/Documents/Git/FreeVario/Src/FreeVario/\FreeVario</ProjectName>
+<ProjectName>/home/marco/Atollic/TrueSTUDIO/ARM_workspace_8.1/FreeVario/Src/FreeVario/\FreeVario</ProjectName>
 <CMSIS>../Drivers/CMSIS</CMSIS>
 <HAL_Driver>/home/marco/STM32Cube/Repository//STM32Cube_FW_F3_V1.9.0/Drivers/CMSIS</HAL_Driver>
 
@@ -9,31 +9,6 @@
 
 <filestoremove>
 	<file>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pcd_ex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/CMSIS/Device/ST/STM32F3xx/Source/Templates/system_stm32f3xx.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c</name>
-	   		<name>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c</name>
 	</file>
 </filestoremove>
 
@@ -42,12 +17,6 @@
 	   <include></include>
     </Aincludes>
 	<Cincludes>
-	   		<include>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Inc</include>
-	   		<include>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/STM32F3xx_HAL_Driver/Inc/Legacy</include>
-	   		<include>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Core/Inc</include>
-	   		<include>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc</include>
-	   		<include>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/CMSIS/Device/ST/STM32F3xx/Include</include>
-	   		<include>/home/marco/STM32Cube/Repository/STM32Cube_FW_F3_V1.9.0/Drivers/CMSIS/Include</include>
     </Cincludes>
 </inctoremove>
 

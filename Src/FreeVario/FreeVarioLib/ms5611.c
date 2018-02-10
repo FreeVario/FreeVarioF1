@@ -1,10 +1,12 @@
 /*
- * ms5611.c
- *
- *  Created on: Jan 6, 2018
- *      Author: marco
- *      Derived from Arduino lib created by Petr Gronat@2014
- */
+ FreeVario http://FreeVario.org
+
+  Copyright (c), PrimalCode (http://www.primalcode.org)
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  any later version. see <http://www.gnu.org/licenses/>
+*/
 
 #define OSR 					2		// 0-3
 #define CMD_RESET 				0x1E

@@ -8,11 +8,18 @@
   any later version. see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FREEVARIO_IT_H_
-#define FREEVARIO_IT_H_
+#ifndef AUDIO_H_
+#define AUDIO_H_
 #include "config.h"
 
-void FV_GpsCallback();
-void FV_TonePeriodCall();
+void AUDIO_SetFreq(uint16_t freq);
+void AUDIO_Setup_Tone();
+void AUDIO_SetTone();
+void AUDIO_ToneOff();
+void AUDIO_ToneON();
+void AUDIO_TonePeriodOn();
+void AUDIO_TonePeriodOff();
+void AUDIO_TestToneCall();
+void AUDIO_TimerCall();
 
-#endif /* FREEVARIO_IT_H_ */
+#endif /* AUDIO_H_ */
