@@ -13,6 +13,8 @@
 
 #include "config.h"
 #define N_PROM_PARAMS 6
+#define MS5611_ADD1 0xEE
+#define MS5611_ADD2 0xEC
 
 
 /**

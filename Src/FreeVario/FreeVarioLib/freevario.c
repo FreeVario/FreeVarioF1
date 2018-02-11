@@ -15,12 +15,6 @@ uint8_t receiveBuffer[120];
 
 
 
-
-extern UART_HandleTypeDef FV_UART2;
-
-
-
-
 //Called from main.c
 void FV_Run(){
 	setup();
@@ -31,7 +25,7 @@ void FV_Run(){
 }
 
 static void setup() {
-
+	 setupConfig();
 	 HAL_UART_Receive_DMA(&FV_UART2, receiveBuffer, sizeof(receiveBuffer));
 	 AUDIO_Setup_Tone();
 	 AUDIO_SetTone();

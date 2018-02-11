@@ -13,7 +13,7 @@
 #include "freevario_it.h"
 #include "audio.h"
 
-//extern I2C_HandleTypeDef FV_I2C1;
+
 extern uint8_t receiveBuffer[120];
 
 uint8_t sendBuffer[120];

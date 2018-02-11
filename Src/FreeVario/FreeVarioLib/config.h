@@ -9,5 +9,14 @@
 #define CONFIG_H_
 #include "../Src/config_hal.h"
 
+#include "settings.h"
+#include "stackops.h"
+#include "globals.h"
+
+
+
+
+//#define VARIO2
+
 
 #endif /* CONFIG_H_ */
