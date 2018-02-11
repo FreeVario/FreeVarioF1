@@ -10,14 +10,9 @@
 
 #include "freevario.h"
 #include "audio.h"
+#include "barosensor.h"
 
 uint8_t receiveBuffer[120];
-
-
-
-
-extern UART_HandleTypeDef FV_UART2;
-
 
 
 
@@ -31,12 +26,14 @@ void FV_Run(){
 }
 
 static void setup() {
-
+	 setupConfig();
 	 HAL_UART_Receive_DMA(&FV_UART2, receiveBuffer, sizeof(receiveBuffer));
 	 AUDIO_Setup_Tone();
 	 AUDIO_SetTone();
 	 AUDIO_ToneOff();
 	 AUDIO_TonePeriodOff();
+
+	 BARO_Setup();
 
 
 }
@@ -46,6 +43,9 @@ static void loop() {
 
 
 	//AUDIO_TestToneCall();
+	Baro_GetSensorData();
+
+
 
 	HAL_Delay(100);
 
