@@ -15,7 +15,7 @@
 
 
 
-
+#define VARIO
 //#define VARIO2
 
 

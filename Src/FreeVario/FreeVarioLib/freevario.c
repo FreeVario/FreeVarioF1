@@ -10,6 +10,7 @@
 
 #include "freevario.h"
 #include "audio.h"
+#include "barosensor.h"
 
 uint8_t receiveBuffer[120];
 
@@ -32,6 +33,8 @@ static void setup() {
 	 AUDIO_ToneOff();
 	 AUDIO_TonePeriodOff();
 
+	 BARO_Setup();
+
 
 }
 
@@ -40,6 +43,9 @@ static void loop() {
 
 
 	//AUDIO_TestToneCall();
+	Baro_GetSensorData();
+
+
 
 	HAL_Delay(100);
 

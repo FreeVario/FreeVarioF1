@@ -7,14 +7,16 @@
 
 #include "barosensor.h"
 #include "ms5611.h"
+#include "stackops.h"
 
 double realPressureAv = 1;
 
 extern float currentVarioFts; // ft/s
 extern float cuttentVarioAvFts;
 extern float currentAltitudeFt;
+Queue_t varioFt;
+Queue_t altitudeFt;
 
-stackT varioFt, altitudeFt;
 
 SD_MS5611 baro1;
 #if defined(VARIO2)
@@ -29,9 +31,8 @@ void BARO_Setup(){
 #if defined(VARIO2)
 	MS5611_Setup( &FV_I2C1, &baro2, MS5611_ADD2);
 #endif
-
-	StackInit(&varioFt, 10);
-	StackInit(&altitudeFt, 10);
+	setQueue(&varioFt, 10);
+	setQueue(&altitudeFt, 10);
 }
 
 float getAltitudeFt() {
@@ -45,27 +46,26 @@ float getAltitudeMt() {
 	return (44330.0f * (1.0f - pow((double)realPressureAv / (double)conf.qnePressure, 0.1902949f)));
 
 }
-/*
+
 //This must be called at 100ms
 void calcVarioFt() {
 
     currentAltitudeFt = getAltitudeFt();
-
-    altitudeFt.push_back(currentAltitudeFt);
-    altitudeFt.erase(altitudeFt.begin());
+    enqueue(&varioFt, currentAltitudeFt);
 
 
-    if (altitudeFt.size() > 9) {
-        currentVarioFts =  altitudeFt.at(0) -  altitudeFt.at(9);
+
+    if (qisFull(&varioFt)) {
+        currentVarioFts =  front(&varioFt) -  rear(&varioFt);
     }else{
         currentVarioFts = 0;
     }
 
-    cuttentVarioAvFts = accumulate( altitudeFt.begin(), altitudeFt.end(), 0.0)/altitudeFt.size();
+    cuttentVarioAvFts = getAvarage(varioFt);
 
 
 }
-*/
+
 
 //This is called at about 20ms
 void Baro_GetSensorData() {
@@ -109,7 +109,7 @@ void Baro_GetSensorData() {
 	#endif
 
 	 //TODO: //realPressureAv = (double(conf.variosmooth) * realPressureAv + pressure) / (double(conf.variosmooth) + 1);
-	  realPressureAv = (double(conf.variosmooth) * realPressureAv + pressure) / (double(conf.variosmooth) + 1);
+	  realPressureAv = ((double)(conf.variosmooth) * realPressureAv + pressure) / ((double)(conf.variosmooth) + 1);
 	#endif
 
 

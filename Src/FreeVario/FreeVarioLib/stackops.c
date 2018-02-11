@@ -1,95 +1,82 @@
-
-
 /*
- *        Author: Robert I. Pitts <rip@cs.bu.edu>
- * Last Modified: March 7, 2000
- *         Topic: Stack - Array Implementation
- * ----------------------------------------------------------------
- *
- * This is an array implementation of a character stack.
- */
+ FreeVario http://FreeVario.org
 
-//#include <stdio.h>
-#include <stdlib.h>  /* for dynamic allocation */
+  Copyright (c), PrimalCode (http://www.primalcode.org)
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  any later version. see <http://www.gnu.org/licenses/>
+*/
+
 #include "stackops.h"
 
-/************************ Function Definitions **********************/
 
-void StackInit(stackT *stackP, int maxSize)
-{
-  stackElementT *newContents;
+void setQueue(Queue_t *queue, int capacity){
 
-  /* Allocate a new array to hold the contents. */
-
-  newContents = (stackElementT *)malloc(sizeof(stackElementT) * maxSize);
-
-  if (newContents == NULL) {
-  //  fprintf(stderr, "Insufficient memory to initialize stack.\n");
-    exit(1);  /* Exit, returning error code. */
-  }
-
-  stackP->contents = newContents;
-  stackP->maxSize = maxSize;
-  stackP->top = -1;  /* I.e., empty */
+    queue->capacity = capacity;
+    queue->front = queue->size = 0;
+    queue->rear = capacity - 1;
+    queue->array = (float*) malloc(queue->capacity * sizeof(float));
+    return queue;
 }
 
-void StackDestroy(stackT *stackP)
+// Queue is full when size becomes equal to the capacity
+int qisFull(Queue_t *queue)
+{  return (queue->size == queue->capacity);  }
+
+// Queue is empty when size is 0
+int qisEmpty(Queue_t *queue)
+{  return (queue->size == 0); }
+
+// Function to add an item to the queue.
+// It changes rear and size
+void enqueue(Queue_t *queue, float item)
 {
-  /* Get rid of array. */
-  free(stackP->contents);
-
-  stackP->contents = NULL;
-  stackP->maxSize = 0;
-  stackP->top = -1;  /* I.e., empty */
-}
-
-void StackPush(stackT *stackP, stackElementT element)
-{
-  if (!StackIsFull(stackP)) {
-
-	  stackP->contents[++stackP->top] = element;
-  }
+    if (qisFull(queue))
+        return;
+    queue->rear = (queue->rear + 1)%queue->capacity;
+    queue->array[queue->rear] = item;
+    queue->size = queue->size + 1;
 
 }
 
-void StackPushPop(stackT *stackP, stackElementT element)
+// Function to remove an item from queue.
+// It changes front and size
+float dequeue(Queue_t *queue)
 {
-  if (StackIsFull(stackP)) {
-	  StackPop(stackP);
-  }
-
-  /* Put information in array; update top. */
-
-  stackP->contents[++stackP->top] = element;
+    if (qisEmpty(queue))
+        return 0;
+    int item = queue->array[queue->front];
+    queue->front = (queue->front + 1)%queue->capacity;
+    queue->size = queue->size - 1;
+    return item;
 }
 
-void StackPop(stackT *stackP)
+// Function to get front of queue
+float front(Queue_t *queue)
 {
-  if (!StackIsEmpty(stackP)) {
-
-	 stackP->top--;
-  }
-
-
+    if (qisEmpty(queue))
+        return 0;
+    return queue->array[queue->front];
 }
 
-float getAvarage(stackT *stackP)  {
+// Function to get rear of queue
+float rear(Queue_t *queue)
+{
+    if (qisEmpty(queue))
+        return 0;
+    return queue->array[queue->rear];
+}
+
+
+float getAvarage(Queue_t *queue)  {
 	float sum=0;
 	int i;
-
-	for(i = 0; i < stackP->top; ++i) {
-			sum += stackP->contents[i];
+	//TODO: test this
+	for(i = queue->rear; i < queue->front +1; ++i) {
+			sum += queue->array[i];
 		}
 
-	return sum / stackP->top;
+	return sum / queue->size;
 }
 
-int StackIsEmpty(stackT *stackP)
-{
-  return stackP->top < 0;
-}
-
-int StackIsFull(stackT *stackP)
-{
-  return stackP->top >= stackP->maxSize - 1;
-}
