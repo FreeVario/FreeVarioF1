@@ -10,13 +10,13 @@ typedef struct
     float* array;
 }Queue_t;
 
-void setQueue(Queue_t *queue, int capacity);
-int qisFull( Queue_t *queue);
-int qisEmpty( Queue_t *queue);
-void enqueue(Queue_t *queue, float item);
-float dequeue( Queue_t *queue);
-float front( Queue_t *queue);
-float rear( Queue_t *queue);
-
+void SO_setQueue(Queue_t *queue, int capacity);
+int SO_qisFull( Queue_t *queue);
+int SO_qisEmpty( Queue_t *queue);
+void SO_enqueue(Queue_t *queue, float item);
+float SO_dequeue( Queue_t *queue);
+float SO_front( Queue_t *queue);
+float SO_rear( Queue_t *queue);
+float SO_getAvarage(Queue_t *queue);
 
 #endif /* STACKOPS_H_ */

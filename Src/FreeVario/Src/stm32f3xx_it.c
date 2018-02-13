@@ -36,7 +36,8 @@
 #include "stm32f3xx_it.h"
 
 /* USER CODE BEGIN 0 */
-#include "freevario_it.h"
+#include "freevario.h"
+
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/

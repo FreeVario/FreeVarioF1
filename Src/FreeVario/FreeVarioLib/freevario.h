@@ -15,6 +15,10 @@
 
 void FV_Run();
 
+
+void FV_GpsCallback();
+void FV_TonePeriodCall();
+
 //private functions
 static void setup();
 static void loop();

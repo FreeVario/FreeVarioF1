@@ -27,4 +27,5 @@
 
 
 
+
 #endif /* CONFIG_HAL_H_ */

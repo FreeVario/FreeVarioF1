@@ -11,8 +11,10 @@
 #include "audio.h"
 
 uint16_t fv_tone_t=4500;
-int8_t step=0;
+float step=0;
 uint8_t dutycycle;
+int8_t variomode=AUDIO_VARIO_SILENT;
+float t_vario=0;
 
 extern TIM_HandleTypeDef FV_TONETMR;
 extern TIM_HandleTypeDef FV_TONEPERIODTMR;
@@ -21,13 +23,20 @@ void AUDIO_Setup_Tone() {
 	 HAL_TIM_PWM_Start(&FV_TONETMR, FV_TONECHN);
 	 HAL_TIM_Base_Start_IT(&FV_TONEPERIODTMR);
 	 FV_TONEPERIODHALTMR->PSC  =  (int)SystemCoreClock / 1000;
-
+	 FV_TONEPERIODHALTMR->ARR = (int) 4500/20;
 
 }
 
 
-void AUDIO_SetFreq(uint16_t freq) {
-	fv_tone_t = 1/freq;
+void noTone() {
+	AUDIO_ToneOff();
+	AUDIO_TonePeriodOff();
+}
+
+void AUDIO_SetFreq(float freq) {
+
+	fv_tone_t = 1/((1 + freq) * 400 + 1000) * 5000000;
+
 }
 
 void AUDIO_ToneOff() {
@@ -57,22 +66,34 @@ void AUDIO_SetTone()
 
 }
 
+//main function to call from the main loop
+void AUDIO_Vario(float vario){
+	if (vario > 0.1 ) {
+		variomode = AUDIO_VARIO_UP;
+		AUDIO_SetFreq(vario);
+		AUDIO_SetTone();
+
+		if (TIM3->CR1 != TIM_CR1_CEN) {
+		AUDIO_TonePeriodOn();
+		}
+	} else {
+		variomode = AUDIO_VARIO_SILENT;
+	}
+}
+
+//call this function to test tone
 void AUDIO_TestToneCall(){
-	if(fv_tone_t <= 200) step = 10;
-	if(fv_tone_t >= 4500) step = -10;
+	if(t_vario <= 0.2) step = 0.2;
+	if(t_vario >= 8) step = -0.2;
 
-	fv_tone_t += step;
+	t_vario += step;
 
-	AUDIO_SetTone();
+	AUDIO_Vario(t_vario);
 
 
 }
 
-//Callback from the timer
-//Timer periods must be done within this function
-
-void AUDIO_TimerCall() {
-
+void AUDIO_varioUP(){
 
 	 if(dutycycle >= 5) dutycycle = 0;
 		dutycycle++;
@@ -87,6 +108,28 @@ void AUDIO_TimerCall() {
 	}
 
 	FV_TONEPERIODHALTMR->ARR = (int) fv_tone_t/20;
+}
+
+//Callback from the timer
+//Timer periods must be done within this function
+
+void AUDIO_TimerCall() {
+
+
+	switch(variomode) {
+
+	case AUDIO_VARIO_SILENT :
+		noTone();
+		break;
+
+	case AUDIO_VARIO_UP:
+		AUDIO_varioUP();
+		break;
+
+	}
+
+
+
 
 
 }

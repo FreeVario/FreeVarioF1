@@ -10,7 +10,7 @@
 
 void setupConfig(){
 #if defined(CONFIGOPT)
-  getConfig();
+
 #else
   getDefaultConfig();
 #endif

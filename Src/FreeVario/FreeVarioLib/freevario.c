@@ -13,7 +13,31 @@
 #include "barosensor.h"
 
 uint8_t receiveBuffer[120];
+uint8_t sendBuffer[120];
+uint32_t sc_timer=0;
+uint32_t sc_timer100=0;
+uint32_t sc_timer1000=0;
 
+extern TIM_HandleTypeDef FV_10HZTMR;
+
+
+//GPS data RX interrupt callback
+void FV_GpsCallback() {
+
+
+	  memcpy(sendBuffer,receiveBuffer,sizeof(receiveBuffer));
+	  CDC_Transmit_FS(sendBuffer, sizeof(sendBuffer));
+	  HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
+
+
+}
+
+//pass through to audio.h
+void FV_TonePeriodCall() {
+
+	AUDIO_TimerCall();
+
+}
 
 
 //Called from main.c
@@ -36,6 +60,7 @@ static void setup() {
 	 BARO_Setup();
 
 
+
 }
 
 
@@ -43,10 +68,29 @@ static void loop() {
 
 
 	//AUDIO_TestToneCall();
-	Baro_GetSensorData();
+
+
+	if (HAL_GetTick() >= (sc_timer+20)) {
+		sc_timer=HAL_GetTick();
+		Baro_GetSensorData();
+
+	}
+
+
+	if (HAL_GetTick() >= (sc_timer100+100)) {
+		sc_timer100=HAL_GetTick();
+		calcVario();
+		//AUDIO_Vario(currentVarioMPS);
+	}
+
+
+	if (HAL_GetTick() >= (sc_timer1000+1000)) {
+		sc_timer1000=HAL_GetTick();
+		AUDIO_TestToneCall();
+	}
 
 
 
-	HAL_Delay(100);
+	HAL_Delay(1);
 
 }

@@ -11,7 +11,7 @@
 #include "stackops.h"
 
 
-void setQueue(Queue_t *queue, int capacity){
+void SO_setQueue(Queue_t *queue, int capacity){
 
     queue->capacity = capacity;
     queue->front = queue->size = 0;
@@ -21,19 +21,19 @@ void setQueue(Queue_t *queue, int capacity){
 }
 
 // Queue is full when size becomes equal to the capacity
-int qisFull(Queue_t *queue)
+int SO_qisFull(Queue_t *queue)
 {  return (queue->size == queue->capacity);  }
 
 // Queue is empty when size is 0
-int qisEmpty(Queue_t *queue)
+int SO_qisEmpty(Queue_t *queue)
 {  return (queue->size == 0); }
 
 // Function to add an item to the queue.
 // It changes rear and size
-void enqueue(Queue_t *queue, float item)
+void SO_enqueue(Queue_t *queue, float item)
 {
-    if (qisFull(queue))
-        return;
+    if (SO_qisFull(queue))
+    	SO_dequeue(queue);
     queue->rear = (queue->rear + 1)%queue->capacity;
     queue->array[queue->rear] = item;
     queue->size = queue->size + 1;
@@ -42,9 +42,9 @@ void enqueue(Queue_t *queue, float item)
 
 // Function to remove an item from queue.
 // It changes front and size
-float dequeue(Queue_t *queue)
+float SO_dequeue(Queue_t *queue)
 {
-    if (qisEmpty(queue))
+    if (SO_qisEmpty(queue))
         return 0;
     int item = queue->array[queue->front];
     queue->front = (queue->front + 1)%queue->capacity;
@@ -53,23 +53,23 @@ float dequeue(Queue_t *queue)
 }
 
 // Function to get front of queue
-float front(Queue_t *queue)
+float SO_front(Queue_t *queue)
 {
-    if (qisEmpty(queue))
+    if (SO_qisEmpty(queue))
         return 0;
     return queue->array[queue->front];
 }
 
 // Function to get rear of queue
-float rear(Queue_t *queue)
+float SO_rear(Queue_t *queue)
 {
-    if (qisEmpty(queue))
+    if (SO_qisEmpty(queue))
         return 0;
     return queue->array[queue->rear];
 }
 
 
-float getAvarage(Queue_t *queue)  {
+float SO_getAvarage(Queue_t *queue)  {
 	float sum=0;
 	int i;
 	//TODO: test this

@@ -9,12 +9,13 @@
 #define BAROSENSOR_H_
 #include "config.h"
 
+extern int32_t realPressureAv;
 
 void BARO_Setup();
 void Baro_GetSensorData();
 float getAltitudeFt();
-float getAltitudeMt();
-void calcVarioFt();
+double getAltitudeMt();
+void calcVario();
 
 
 

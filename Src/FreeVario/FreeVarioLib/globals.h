@@ -13,8 +13,9 @@ settings_t conf;
 extern I2C_HandleTypeDef FV_I2C1;
 extern UART_HandleTypeDef FV_UART2;
 
-float currentVarioFts; // ft/s
-float cuttentVarioAvFts;
-float currentAltitudeFt;
+
+float currentVarioMPS; // ft/s
+float cuttentVarioAvMPS;
+float currentAltitudeMtr;
 
 #endif /* GLOBALS_H_ */
