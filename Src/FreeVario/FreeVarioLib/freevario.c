@@ -80,7 +80,7 @@ static void loop() {
 	if (HAL_GetTick() >= (sc_timer100+100)) {
 		sc_timer100=HAL_GetTick();
 		calcVario();
-		//AUDIO_Vario(currentVarioMPS);
+		AUDIO_Vario(currentVarioMPS);
 	}
 
 
