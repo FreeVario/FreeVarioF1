@@ -53,9 +53,8 @@ static void setup() {
 	 setupConfig();
 	 HAL_UART_Receive_DMA(&FV_UART2, receiveBuffer, sizeof(receiveBuffer));
 	 AUDIO_Setup_Tone();
-	 AUDIO_SetTone();
-	 AUDIO_ToneOff();
-	 AUDIO_TonePeriodOff();
+	 noTone();
+
 
 	 BARO_Setup();
 
@@ -80,13 +79,15 @@ static void loop() {
 	if (HAL_GetTick() >= (sc_timer100+100)) {
 		sc_timer100=HAL_GetTick();
 		calcVario();
-		AUDIO_Vario(currentVarioMPS);
+		makeVarioAudio(currentVarioMPS);
 	}
 
 
 	if (HAL_GetTick() >= (sc_timer1000+1000)) {
 		sc_timer1000=HAL_GetTick();
+#if defined(TESTBUZZER)
 		AUDIO_TestToneCall();
+#endif
 	}
 
 

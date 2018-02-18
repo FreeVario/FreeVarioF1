@@ -22,10 +22,12 @@
 #define FV_TONECHN TIM_CHANNEL_1
 #define FV_TONECCR CCR1
 #define FV_TONEHALTMR TIM1
-#define FV_TONEPERIODTMR htim2
-#define FV_TONEPERIODHALTMR TIM2
 
 
+#define FV_DACTMR htim6
+#define FV_DACHALTMR TIM6
+#define FV_DAC hdac
+#define FV_DAC_CHANNEL DAC_CHANNEL_1
 
 
 #endif /* CONFIG_HAL_H_ */

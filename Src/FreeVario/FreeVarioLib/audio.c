@@ -10,246 +10,281 @@
 
 #include "audio.h"
 
-uint16_t fv_tone_t=4500;
+
 float step=0;
-uint8_t dutycycle;
-uint8_t toneisOn=1;
-uint8_t peroidisOn=0;
-uint8_t g_period=0;
-int8_t sinkwarncounter=0;
-int8_t variomode=AUDIO_VARIO_SILENT;
+float vario_s=0;
 float t_vario=-5;
 
+
+bool climbing = false;
+int tm;
+int rm;
+int stime;
+bool toneOn = false;
+bool muted = false;
+float variof;
+float variofr;
+int pause=0;
+int tcount=0;
+int notonetimer=0;
+
+
+const uint16_t sine_wave_array[32] = {2047, 1648, 1264, 910, 600,  345,
+        156, 39,  0,  39,  156,  345,
+        600, 910, 1264, 1648, 2048, 2447,
+        2831, 3185, 3495, 3750, 3939, 4056,
+        4095, 4056, 3939, 3750, 3495, 3185,
+        2831, 2447};
+
+
 extern TIM_HandleTypeDef FV_TONETMR;
-extern TIM_HandleTypeDef FV_TONEPERIODTMR;
+
+
+
+extern DAC_HandleTypeDef FV_DAC;
+extern TIM_HandleTypeDef FV_DACTMR;
 
 void AUDIO_Setup_Tone() {
 	 HAL_TIM_PWM_Start(&FV_TONETMR, FV_TONECHN);
-	 HAL_TIM_Base_Start_IT(&FV_TONEPERIODTMR);
-	 FV_TONEHALTMR->PSC  = SystemCoreClock/2057142.857;
-	 FV_TONEPERIODHALTMR->PSC  =  (int)SystemCoreClock / 1000;
-	 FV_TONEPERIODHALTMR->ARR = (int) 4500/30;
+
+	 FV_TONEHALTMR->PSC  = SystemCoreClock/100000;
+
+	 //DAC output
+
+	 HAL_TIM_Base_Start(&FV_DACTMR);
+	 HAL_DAC_Start(&FV_DAC,FV_DAC_CHANNEL);
+	 HAL_DAC_Start_DMA(&FV_DAC, FV_DAC_CHANNEL, (uint32_t*)sine_wave_array, 32, DAC_ALIGN_12B_R);
+	 FV_DACHALTMR->PSC = SystemCoreClock/100000000;
 
 
 }
 
 
-void noTone() {
-	AUDIO_ToneOff();
-	AUDIO_TonePeriodOff();
-	dutycycle = 0;
-}
+#define BASEPULSE 200
+#define TOPPULSE  1000
 
-void AUDIO_SetFreq(float freq) {
 
-	fv_tone_t = 1/((1 + freq) * 400 + 1000) * 5000000;
+void tone(float freq, int period) {
 
-}
+    notonetimer = period + millis();
+    uint16_t fv_tone_t = 1/(float)freq * 100000;
+   // FV_TONEHALTMR->CR1 |= TIM_CR1_CEN;
+    FV_TONEHALTMR->ARR  = fv_tone_t;
+	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
 
-void AUDIO_ToneOffOnce() {
-	 FV_TONEHALTMR->CR1  = 0;
-	toneisOn =0;
 
-}
-void AUDIO_ToneOff() {
-	 FV_TONEHALTMR->CR1  = 0;
+	FV_DACHALTMR->ARR = 1/(float)freq * 1000000;
 
+
+	FV_DACHALTMR->CR1 |= TIM_CR1_CEN;
 
 }
 
-void AUDIO_ToneONonce() {
-	if (!toneisOn)FV_TONEHALTMR->CR1 |= TIM_CR1_CEN;
-	toneisOn =1;
-
-}
-
-
-void AUDIO_ToneON() {
-	FV_TONEHALTMR->CR1 |= TIM_CR1_CEN;
-
-}
-
-void AUDIO_TonePeriodOn() {
-
-	if(!peroidisOn)	FV_TONEPERIODHALTMR->CR1 |= TIM_CR1_CEN;
-	peroidisOn=1;
-
-}
-
-void AUDIO_SinglePeriod(int8_t period) {
-
-	if (!(g_period && period)) {
-		g_period = period;
-		FV_TONEPERIODHALTMR->ARR = period;
-
-	}
-}
-
-void AUDIO_TonePeriodOff() {
-	if( peroidisOn) FV_TONEPERIODHALTMR->CR1  = 0;
-	peroidisOn=0;
-}
-
-void AUDIO_SetTone()
-{
-
-	//FV_TONEHALTMR->PSC  = SystemCoreClock/2057142.857;
-	FV_TONEHALTMR->ARR  = fv_tone_t;
+//changes tone while beeping
+void dynaTone(float freq) {
+	uint16_t fv_tone_t = 1/(float)freq * 100000;
+	 FV_TONEHALTMR->ARR  = fv_tone_t;
 	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
 
 }
 
-//main function to call from the main loop
-void AUDIO_Vario(float vario){
-	vario = t_vario;
+int millis() {
 
-	if (vario > 0.2 ) {
-		variomode = AUDIO_VARIO_UP;
-		AUDIO_SetFreq(vario);
-		AUDIO_SetTone();
-		AUDIO_TonePeriodOn();
-
-	}else if ((vario <= 0.1) && (vario >= -0.3)){
-		variomode = AUDIO_VARIO_PRETHERMAL;
-		AUDIO_SetFreq(vario);
-		AUDIO_SetTone();
-		AUDIO_TonePeriodOn();
-		AUDIO_SinglePeriod(100);
-
-	}else if (vario <= -4){
-		variomode = AUDIO_VARIO_SINKALARM;
-		AUDIO_TonePeriodOn();
-		AUDIO_ToneON();
-
-	}else if ((vario <= -1.8) && (vario >= -3.9)){
-		variomode = AUDIO_VARIO_SINK_ALERT;
-		AUDIO_TonePeriodOn();
-		sinkwarncounter = 2*vario;
-	} else {
-		variomode = AUDIO_VARIO_SILENT;
-		AUDIO_ToneOffOnce();
-	}
+  return HAL_GetTick();
 }
+
+void noTone() {
+
+	 //FV_TONEHALTMR->CR1 = 0;
+	FV_TONEHALTMR->FV_TONECCR =0;
+	 FV_DACHALTMR->CR1=0;
+
+}
+
+
+
+void noToneTimer() {
+   if(millis() >= notonetimer && notonetimer > 0) {
+     noTone();
+     notonetimer = 0;
+   }
+
+}
+
+
+// Non-Blocking beep blob beep
+void playTwoToneInterval(int freq,int freq2, int period, int intervald) {
+
+
+  if (toneOn) {
+    int wait = period + tm;
+
+
+    if ( wait < millis()) {
+      toneOn = false;
+      //noTone();
+      tone(freq2, intervald);
+      rm = millis();
+    }
+
+  } else {
+    int ndwait = intervald + rm;
+
+    if(ndwait < millis()) {
+
+    tone( freq, period);
+    toneOn = true;
+    tm = millis();
+    }
+  }
+
+}
+
+
+// Non-Blocking beep beep beep
+void playToneInterval(int freq, int period, int tinterval) {
+
+  if (toneOn) {
+    int wait = period + tinterval + tm;
+
+    if ( wait < millis()) {
+      toneOn = false;
+      noTone();
+      tcount++; // count the amount of beeps for playTonePause
+      if (tcount > 1000) { // prevent overflow
+        tcount = 0;
+      }
+    }
+
+  } else {
+    tone( freq, period);
+    toneOn = true;
+    tm = millis();
+  }
+
+}
+
+
+// Plays nbeeps then pause
+
+void playTonePause(int freq, int nbeeps, int tpause) {
+
+   if (pause < millis()) {
+
+      if (tcount < nbeeps) {
+        playToneInterval(freq, 500, 200);
+
+      }else{
+        pause = millis() + tpause;
+        tcount=0;
+
+      }
+
+
+   }
+
+
+}
+
+void makeVarioAudio(float vario) {
+  int pulse;
+  float varioorg = vario;
+   noToneTimer();
+
+#if defined(TESTBUZZER)
+  vario = t_vario;
+
+#endif
+
+  if (vario > 9) {
+    vario = 9;
+
+  }
+
+  if (vario < -9) {
+    vario = -9;
+
+  }
+
+#if defined(SOARDETECTION) && !defined(TESTBUZZER)
+
+  if (varioorg > -0.2 && varioorg < 0.2) {
+    int diffe = millis() - stime;
+    if (diffe >  (int)(conf.SoarDeadBandTime)) {
+      muted = true;
+    }
+  } else {
+    stime = millis();
+    muted = false;
+  }
+
+#endif
+
+    variofr = ((float)(fabs(vario + 1)) * 200 ) + 400;
+
+    variof = (5 * variof + variofr )/6;
+
+    if (vario <= 0 && vario >= BUZZERZEROCLIMB) { // prethermal audio bip bip bip
+
+
+
+      if (!muted) {
+         playToneInterval(variof, 50, 400);
+      }
+
+    }
+
+   if (vario <= (double)(conf.sinkAlarmLevel)/1000 ) { //sink alarm
+      if (!muted) {
+         playTwoToneInterval(1400, 1800, 50, 50);
+      }
+
+   }
+
+#if defined(BUZZSINKALERT) //sink alert beh beh beh (-3)
+    if (vario <=  BUZZSINKALERT && vario > (double)(conf.sinkAlarmLevel)/1000 ) {
+       playTonePause(300, fabs(vario), BUZZSINKALERTPAUSE);
+    }
+
+#endif
+
+
+
+
+
+
+  if (vario > 0) {
+    pulse = TOPPULSE / (vario * 10) + 100;
+    dynaTone(variof);
+    if (!muted) {
+      playToneInterval(variof, pulse, pulse / 2);
+    }
+    climbing = true;
+  } else {
+    if (climbing ) { //dropped out of the thermal
+      tone( 100, OUTOFTHERMALBUZZT);
+      climbing = false;
+    }
+  }
+
+}
+
 
 //call this function to test tone
 void AUDIO_TestToneCall(){
-	if(t_vario <= -2) step = 0.2;
-	if(t_vario >= 9) step = -0.2;
+	if(t_vario <= -5) step = 0.1;
+	if(t_vario >= 9) step = -0.1;
 
 	t_vario += step;
 
-	//AUDIO_Vario(t_vario);
-
-}
-
-void AUDIO_varioUP(){
-
-	 if(dutycycle >= 5) dutycycle = 0;
-		dutycycle++;
-
-
-	if ((dutycycle > 3) && (dutycycle <= 5)) {
-		FV_TONEHALTMR->CR1  = 0;
-
-	}else{
-
-		FV_TONEHALTMR->CR1  |= TIM_CR1_CEN;
-	}
-
-	FV_TONEPERIODHALTMR->ARR = (int) fv_tone_t/20;
-}
-
-
-void AUDIO_varioPrethermal(){
-
-	 if(dutycycle >= 9) dutycycle = 0;
-		dutycycle++;
-
-
-	if ((dutycycle == 1) || (dutycycle == 4) || (dutycycle == 7)) {
-
-
-		AUDIO_ToneON();
-	}else{
-
-
-		AUDIO_ToneOff();
-	}
 
 
 }
 
-void AUDIO_varioSinkAlarm() {
-
-	 if(dutycycle >= 1) {
-		 dutycycle = 0;
-		 fv_tone_t=1000;
-		 AUDIO_SetTone();
-
-	 }else {
-		 dutycycle = 1;
-		 fv_tone_t=2000;
-		 AUDIO_SetTone();
 
 
-	 }
-
-	FV_TONEPERIODHALTMR->ARR = (int) 150;
-
-}
-
-void AUDIO_varioSinkWarning() {
-
-	 if(dutycycle >= 10 + -sinkwarncounter ) dutycycle = 0;
-	    dutycycle++;
-
-	    if(dutycycle <= -sinkwarncounter){
-	    	if(dutycycle%2 == 0) {
-	    		fv_tone_t=8500;
-	    		AUDIO_SetTone();
-	    		AUDIO_ToneON();
-	    	}else{
-	    		AUDIO_ToneOff();
-	    	}
-
-	    } else {
-	    	AUDIO_ToneOff();
-	    }
-
-	FV_TONEPERIODHALTMR->ARR = (int) 350;
-
-}
-
-//Callback from the timer
-//Timer periods must be done within this function
 
 void AUDIO_TimerCall() {
-
-
-	switch(variomode) {
-
-	case AUDIO_VARIO_SILENT :
-		noTone();
-		break;
-
-	case AUDIO_VARIO_UP:
-		AUDIO_varioUP();
-		break;
-
-	case AUDIO_VARIO_PRETHERMAL:
-		AUDIO_varioPrethermal();
-			break;
-
-	case AUDIO_VARIO_SINKALARM:
-		AUDIO_varioSinkAlarm();
-		break;
-
-	case AUDIO_VARIO_SINK_ALERT:
-		AUDIO_varioSinkWarning();
-		break;
-
-	}
-
 
 
 

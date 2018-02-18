@@ -24,7 +24,7 @@ void getDefaultConfig() {
   conf.qnePressure = 101325;
 
   // X 1000 Level to sound sink alarm
-  conf.sinkAlarmLevel = -5000;
+  conf.sinkAlarmLevel = -4000;
 
   //send data via serial port
   conf.SerialOut = true;
