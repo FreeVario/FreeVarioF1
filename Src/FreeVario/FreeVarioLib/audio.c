@@ -47,7 +47,7 @@ extern TIM_HandleTypeDef FV_DACTMR;
 void AUDIO_Setup_Tone() {
 	 HAL_TIM_PWM_Start(&FV_TONETMR, FV_TONECHN);
 
-	 FV_TONEHALTMR->PSC  = SystemCoreClock/100000;
+	 FV_TONEHALTMR->PSC  = SystemCoreClock/10000000;
 
 	 //DAC output
 
@@ -62,18 +62,19 @@ void AUDIO_Setup_Tone() {
 
 #define BASEPULSE 200
 #define TOPPULSE  1000
-
+#define PWMTMRMULTIPLIER 10000000
+#define DACTMRMULTIPLIER 1000000
 
 void tone(float freq, int period) {
 
     notonetimer = period + millis();
-    uint16_t fv_tone_t = 1/(float)freq * 100000;
+    uint16_t fv_tone_t = 1/(float)freq * PWMTMRMULTIPLIER;
    // FV_TONEHALTMR->CR1 |= TIM_CR1_CEN;
     FV_TONEHALTMR->ARR  = fv_tone_t;
 	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
 
 
-	FV_DACHALTMR->ARR = 1/(float)freq * 1000000;
+	FV_DACHALTMR->ARR = 1/(float)freq * DACTMRMULTIPLIER;
 
 
 	FV_DACHALTMR->CR1 |= TIM_CR1_CEN;
@@ -82,9 +83,11 @@ void tone(float freq, int period) {
 
 //changes tone while beeping
 void dynaTone(float freq) {
-	uint16_t fv_tone_t = 1/(float)freq * 100000;
+	uint16_t fv_tone_t = 1/(float)freq * PWMTMRMULTIPLIER;
 	 FV_TONEHALTMR->ARR  = fv_tone_t;
 	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
+	FV_DACHALTMR->ARR = 1/(float)freq * DACTMRMULTIPLIER;
+
 
 }
 
@@ -220,9 +223,9 @@ void makeVarioAudio(float vario) {
 
 #endif
 
-    variofr = ((float)(fabs(vario + 1)) * 200 ) + 400;
+    variof = ((float)(fabs(vario + 1)) * 200 ) + 400;
 
-    variof = (5 * variof + variofr )/6;
+   // variof = (15 * variof + variofr )/16;
 
     if (vario <= 0 && vario >= BUZZERZEROCLIMB) { // prethermal audio bip bip bip
 
@@ -255,8 +258,9 @@ void makeVarioAudio(float vario) {
 
   if (vario > 0) {
     pulse = TOPPULSE / (vario * 10) + 100;
-    dynaTone(variof);
+
     if (!muted) {
+      dynaTone(variof);
       playToneInterval(variof, pulse, pulse / 2);
     }
     climbing = true;

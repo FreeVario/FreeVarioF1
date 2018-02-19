@@ -69,17 +69,17 @@ static void loop() {
 	//AUDIO_TestToneCall();
 
 
-	if (HAL_GetTick() >= (sc_timer+20)) {
+	if (HAL_GetTick() >= (sc_timer+40)) {
 		sc_timer=HAL_GetTick();
 		Baro_GetSensorData();
-
+		makeVarioAudio((float)currentVarioMPS);
 	}
 
 
 	if (HAL_GetTick() >= (sc_timer100+100)) {
 		sc_timer100=HAL_GetTick();
 		calcVario();
-		makeVarioAudio(currentVarioMPS);
+
 	}
 
 
