@@ -33,6 +33,7 @@ typedef struct  {
 
 
 void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add);
+void MS5611_Reset(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct);
 void MS5611_sendCommand(uint8_t cmd,uint8_t adress, I2C_HandleTypeDef *hi2c);
 void MS5611_readPressure(I2C_HandleTypeDef *hi2c,SD_MS5611* MS_Datastruct);
 void MS5611_readTemperature(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct);

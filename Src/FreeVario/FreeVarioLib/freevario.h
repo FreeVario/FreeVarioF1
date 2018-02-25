@@ -14,6 +14,12 @@
 
 
 void FV_Run();
+void run10();
+void run100();
+void run1000();
+
+void FV_GpsCallback();
+void  FV_DHTCallback();
 
 //private functions
 static void setup();

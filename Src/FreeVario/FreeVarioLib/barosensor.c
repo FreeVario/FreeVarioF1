@@ -1,22 +1,29 @@
 /*
- * barosensor.c
- *
- *  Created on: Feb 11, 2018
- *      Author: marco
- */
+ FreeVario http://FreeVario.org
+
+  Copyright (c), PrimalCode (http://www.primalcode.org)
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  any later version. see <http://www.gnu.org/licenses/>
+*/
 
 #include "barosensor.h"
 #include "ms5611.h"
 #include "stackops.h"
+#include <math.h>
 
-double realPressureAv = 1;
+int32_t realPressureAv = 1;
 
-extern float currentVarioFts; // ft/s
-extern float cuttentVarioAvFts;
-extern float currentAltitudeFt;
-Queue_t varioFt;
-Queue_t altitudeFt;
-
+extern float currentVarioMPS; //
+extern float cuttentVarioAvMPS;
+extern float currentAltitudeMtr;
+uint8_t takeoff=0;
+uint8_t vTriggerd;
+Queue_t VarioMPS;
+Queue_t AltitudeMtr;
+uint32_t vtime=0;
+int16_t count=0;
 
 SD_MS5611 baro1;
 #if defined(VARIO2)
@@ -31,9 +38,18 @@ void BARO_Setup(){
 #if defined(VARIO2)
 	MS5611_Setup( &FV_I2C1, &baro2, MS5611_ADD2);
 #endif
-	setQueue(&varioFt, 10);
-	setQueue(&altitudeFt, 10);
+	SO_setQueue(&VarioMPS, 10); //vario m/s
+	SO_setQueue(&AltitudeMtr, 10); //alitude in meters
 }
+
+void BARO_Reset(){
+	MS5611_Reset( &FV_I2C1, &baro1);
+#if defined(VARIO2)
+	MS5611_Reset( &FV_I2C1, &baro2);
+#endif
+
+}
+
 
 float getAltitudeFt() {
 
@@ -43,36 +59,37 @@ float getAltitudeFt() {
 
 float getAltitudeMt() {
 
-	return (44330.0f * (1.0f - pow((double)realPressureAv / (double)conf.qnePressure, 0.1902949f)));
+	return 44330.0f * (1.0f - pow(realPressureAv / (float)conf.qnePressure, 0.1902949f));
+
 
 }
 
 //This must be called at 100ms
-void calcVarioFt() {
+void calcVario() {
 
-    currentAltitudeFt = getAltitudeFt();
-    enqueue(&varioFt, currentAltitudeFt);
+    currentAltitudeMtr = getAltitudeMt();
+    SO_enqueue(&AltitudeMtr, currentAltitudeMtr);
 
 
-
-    if (qisFull(&varioFt)) {
-        currentVarioFts =  front(&varioFt) -  rear(&varioFt);
+    count=0;//Debug counter.
+    if (SO_qisFull(&AltitudeMtr)) {
+        currentVarioMPS =  SO_front(&AltitudeMtr) -  SO_rear(&AltitudeMtr);
+        cuttentVarioAvMPS = SO_getAvarage(&VarioMPS);
     }else{
-        currentVarioFts = 0;
+        currentVarioMPS = 0;
     }
 
-    cuttentVarioAvFts = getAvarage(varioFt);
+
 
 
 }
 
-
 //This is called at about 20ms
-void Baro_GetSensorData() {
-	#if defined(VARIO)
-	  double pressure;
+void Baro_Read() {
+
+	count++; //Debug counter.
 	  MS5611_readPressure(&FV_I2C1, &baro1);
-	  pressure = baro1.uP;
+	  int32_t pressure = baro1.uP;
 
 	#if defined(VARIO2)
 	  double pressure2;
@@ -108,12 +125,55 @@ void Baro_GetSensorData() {
 	#endif
 	#endif
 
-	 //TODO: //realPressureAv = (double(conf.variosmooth) * realPressureAv + pressure) / (double(conf.variosmooth) + 1);
-	  realPressureAv = ((double)(conf.variosmooth) * realPressureAv + pressure) / ((double)(conf.variosmooth) + 1);
-	#endif
+
+	  realPressureAv = (conf.variosmooth * realPressureAv + pressure) / (conf.variosmooth + 1);
+
+
 
 
 	}
+
+void checkAdaptiveVario(float vario) {
+#if defined(ADAPTIVEVARIO)
+
+  double triggerLevel = (double)(conf.advTriggerLevel)/1000;
+
+  if(takeoff) { //compensate for glider sink
+    vario += -(double)(conf.gliderSinkRate)/1000;
+  }
+
+
+  if (fabs(vario) > triggerLevel && !vTriggerd) { //fabs abs but can handle floats
+	vtime = HAL_GetTick();
+    vTriggerd = true;
+  }
+
+  int diff = HAL_GetTick() - vtime;
+
+  //Vario level goes back to zero within TriggerTime, increase the filter
+  if (vTriggerd && fabs(vario) < triggerLevel  && diff < (int)(conf.advTriggerTime))  {
+    if (conf.variosmooth <= conf.advMaxSmooth ) {
+      conf.variosmooth++;
+      vTriggerd = false;
+      vtime = HAL_GetTick();
+
+    }
+  }
+
+  //overflow reset
+  if (diff > conf.advTriggerTime && vTriggerd) {
+    vTriggerd = false;
+    vtime = HAL_GetTick();;
+  }
+  //Vario stays below trigger level for advRelaxTime, decrease the filter
+  if (fabs(vario) < (float)(triggerLevel) && !vTriggerd && diff >  conf.advRelaxTime) {
+    if (conf.variosmooth > conf.advMinSmooth ) {
+      conf.variosmooth--;
+      vtime = HAL_GetTick();
+    }
+  }
+#endif
+}
 
 
 

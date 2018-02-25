@@ -9,19 +9,11 @@
 */
 
 
-#ifndef BAROSENSOR_H_
-#define BAROSENSOR_H_
+#ifndef HUMIDITY_H_
+#define HUMIDITY_H_
 #include "config.h"
 
-extern int32_t realPressureAv;
+void HUMID_Setup();
+void HUMID_Read();
 
-void BARO_Setup();
-void BARO_Reset();
-void Baro_Read();
-float getAltitudeFt();
-float getAltitudeMt();
-void calcVario();
-void checkAdaptiveVario(float vario);
-
-
-#endif /* BAROSENSOR_H_ */
+#endif /* HUMIDITY_H_ */

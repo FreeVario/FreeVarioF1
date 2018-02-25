@@ -9,19 +9,10 @@
 */
 
 
-#ifndef BAROSENSOR_H_
-#define BAROSENSOR_H_
+#ifndef ACCELEROMETER_H_
+#define ACCELEROMETER_H_
 #include "config.h"
 
-extern int32_t realPressureAv;
-
-void BARO_Setup();
-void BARO_Reset();
-void Baro_Read();
-float getAltitudeFt();
-float getAltitudeMt();
-void calcVario();
-void checkAdaptiveVario(float vario);
 
 
-#endif /* BAROSENSOR_H_ */
+#endif /* ACCELEROMETER_H_ */

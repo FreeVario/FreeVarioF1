@@ -12,14 +12,19 @@
 #define AUDIO_H_
 #include "config.h"
 
-void AUDIO_SetFreq(uint16_t freq);
+
+void makeVarioAudio(float vario);
 void AUDIO_Setup_Tone();
-void AUDIO_SetTone();
-void AUDIO_ToneOff();
-void AUDIO_ToneON();
-void AUDIO_TonePeriodOn();
-void AUDIO_TonePeriodOff();
+void tone(float freq, int period);
+void noTone();
+int millis();
+void playTonePause(int freq, int nbeeps, int tpause);
+void playToneInterval(int freq, int period, int tinterval);
+void playTwoToneInterval(int freq,int freq2, int period, int intervald);
+void noToneTimer();
+void dynaTone(float freq);
+
 void AUDIO_TestToneCall();
-void AUDIO_TimerCall();
+
 
 #endif /* AUDIO_H_ */

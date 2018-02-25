@@ -8,11 +8,14 @@
   any later version. see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FREEVARIO_IT_H_
-#define FREEVARIO_IT_H_
+
+#ifndef SENDDATA_H_
+#define SENDDATA_H_
 #include "config.h"
 
-void FV_GpsCallback();
-void FV_TonePeriodCall();
 
-#endif /* FREEVARIO_IT_H_ */
+
+void sendSensorData();
+void sendSplitGPSData(char * buffer);
+
+#endif /* SENDDATA_H_ */

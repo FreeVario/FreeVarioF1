@@ -8,20 +8,23 @@
   any later version. see <http://www.gnu.org/licenses/>
 */
 
-
-#ifndef BAROSENSOR_H_
-#define BAROSENSOR_H_
-#include "config.h"
-
-extern int32_t realPressureAv;
-
-void BARO_Setup();
-void BARO_Reset();
-void Baro_Read();
-float getAltitudeFt();
-float getAltitudeMt();
-void calcVario();
-void checkAdaptiveVario(float vario);
+#include "humidity.h"
+#include "am2322.h"
 
 
-#endif /* BAROSENSOR_H_ */
+extern float humidity;
+extern float humidtemp;
+
+void HUMID_Setup(){
+
+}
+
+
+
+void HUMID_Read() {
+#ifdef FV_AMI2C
+	AM2322_poll(&FV_AMI2C);
+	humidity=AM2322_getHumidity();
+	humidtemp=AM2322_getTemperature();
+#endif
+}
