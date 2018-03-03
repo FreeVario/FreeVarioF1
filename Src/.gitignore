@@ -1,0 +1,6 @@
+*
+!readme.md
+!FreeVario
+!FreeVario/FreeVarioLib
+!FreeVario/FreeVarioLib/*
+!.gitignore

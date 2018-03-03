@@ -13,7 +13,7 @@
 #include "stackops.h"
 #include <math.h>
 
-int32_t realPressureAv = 1;
+extern int32_t realPressureAv; // pressure hpa * 100
 
 extern float currentVarioMPS; //
 extern float cuttentVarioAvMPS;

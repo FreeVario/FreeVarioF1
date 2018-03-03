@@ -78,11 +78,11 @@ bool AM2322_poll(I2C_HandleTypeDef *hi2c)
 
     // read data
 
-   // _i2c.write(AM2321_I2C_ADDR, (char*)READ_REGISTER_CMD, 3);
+
     HAL_I2C_Master_Transmit(hi2c,AM2321_I2C_ADDR,(uint8_t *)READ_REGISTER_CMD, 3,100);
     HAL_Delay(2);
 
-    //if(_i2c.read(AM2321_I2C_ADDR, (char*)data, 8) == 0)
+
     if(HAL_I2C_Master_Receive(hi2c,AM2321_I2C_ADDR,(uint8_t *)data,8,100) == 0)
     {
         uint8_t  cmd     = data[0];

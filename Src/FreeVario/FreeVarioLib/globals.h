@@ -16,7 +16,8 @@
 //ALL global references
 settings_t conf;
 extern I2C_HandleTypeDef FV_I2C1;
-extern UART_HandleTypeDef FV_UART2;
+extern UART_HandleTypeDef FV_UARTGPS;
+extern UART_HandleTypeDef FV_UARTBT;
 
 //DHT TIMER
 extern TIM_HandleTypeDef FV_DHTTIMER;
@@ -24,7 +25,7 @@ extern TIM_HandleTypeDef FV_DHTTIMER;
 float currentVarioMPS; // ft/s
 float cuttentVarioAvMPS;
 float currentAltitudeMtr;
-
+int32_t realPressureAv;  // pressure hpa * 100
 
 float accel_x;
 float accel_y;
@@ -35,6 +36,8 @@ float gyro_z;
 
 float humidity;
 float humidtemp;
+
+
 
 extern uint8_t takeoff;
 

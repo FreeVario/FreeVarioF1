@@ -25,6 +25,8 @@
 
 #include "ms5611.h"
 #include <math.h>
+int8_t i2c1Receive[1];
+
 
 void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add) {
 	MS_Datastruct->_T = 0;
@@ -33,10 +35,15 @@ void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add
 	for (uint8_t k = 0; k < N_PROM_PARAMS; k++)
 		MS_Datastruct->uC[k] = 69;
 	MS_Datastruct->adress = add;
+
+
 	MS5611_sendCommand(CMD_RESET, MS_Datastruct->adress, hi2c);
 
 	HAL_Delay(100);
 	MS5611_readCalibration(hi2c, MS_Datastruct);
+
+
+
 
 }
 
@@ -67,6 +74,7 @@ void MS5611_readTemperature(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct) {
 	// Code below can be uncommented for slight speedup:
 	// NOTE: Be sure what you do! Notice that Delta 1C ~= Delta 2hPa
 	//****************
+
 	if (fabs(HAL_GetTick() - MS_Datastruct->_lastTime) < T_THR)
 		return;
 	MS_Datastruct->_lastTime = HAL_GetTick();
@@ -122,6 +130,12 @@ void MS5611_sendCommand(uint8_t cmd, uint8_t adress, I2C_HandleTypeDef *hi2c) {
 
 }
 
+void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c,uint8_t transferdirection,uint16_t AddrMatchCode){
+	HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
+}
+
+
+
 uint32_t MS5611_readnBytes(uint8_t nBytes, uint8_t adress,
 		I2C_HandleTypeDef *hi2c) {
 
@@ -141,4 +155,5 @@ uint32_t MS5611_readnBytes(uint8_t nBytes, uint8_t adress,
 	return data;
 	// no byte required
 }
+
 

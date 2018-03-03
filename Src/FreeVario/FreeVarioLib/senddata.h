@@ -15,7 +15,8 @@
 
 
 
-void sendSensorData();
-void sendSplitGPSData(char * buffer);
+void sendSensorData(); //manager
+void SendDataGPSbuid(char c); //team lead
+void sendsData(char* txbuffer); //actually does the work
 
 #endif /* SENDDATA_H_ */

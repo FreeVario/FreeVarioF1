@@ -17,35 +17,47 @@
 #include <string.h>
 #include <stdio.h>
 
-char receiveBuffer[1024];
-char *sendBuffer[1024];
+
+#define GPSDMABUFFER 120
+
+
+uint8_t receiveBuffer[GPSDMABUFFER];
+char transferBuffer[GPSDMABUFFER];
+
+
+
 uint32_t sc_timer=0;
 uint32_t sc_timer100=0;
 uint32_t sc_timer1000=0;
 uint8_t startwaitcomplete=0;
 uint32_t startTime=0;
 uint8_t gpsdata=0;
+int8_t i2cReceive[1];
 
-extern TIM_HandleTypeDef FV_10HZTMR;
 
 
-//GPS data RX interrupt callback
-void FV_GpsCallback() {
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+	strcpy(transferBuffer, receiveBuffer);
 
 	gpsdata =1;
 
 }
+
 
 //check for values that goes out of scale
 void watchValues() {
 	if (currentVarioMPS >= 99){
 		currentVarioMPS = 99;
 		BARO_Reset();
+
 	}
 
 	if (currentVarioMPS <= -99) {
 		currentVarioMPS = -99;
 		BARO_Reset();
+
 	}
 }
 
@@ -61,8 +73,15 @@ void FV_Run(){
 
 //fast loop
 void run10() {
+#if defined(VARIO)
 	Baro_Read();
+#endif
+#if defined(ACCL)
 	ACCL_Read();
+#endif
+
+
+
 	if (takeoff) makeVarioAudio((float)currentVarioMPS);
 }
 
@@ -73,36 +92,30 @@ void run100() {
 	if (startwaitcomplete) {
 		watchValues();
 		checkAdaptiveVario(currentVarioMPS);
-		if (gpsdata) {
+		sendSensorData();
 
-			strncpy(&sendBuffer, receiveBuffer, sizeof(receiveBuffer));
-
-			CDC_Transmit_FS(&sendBuffer, sizeof(sendBuffer));
-
-			gpsdata = 0;
-			HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
-
-		} else {
-
-			sendSensorData();
-		}
 
 	}
 }
 
 //slow loop
 void run1000() {
+#if defined(HUMID)
 	HUMID_Read();
+#endif
 #if defined(TESTBUZZER)
 			AUDIO_TestToneCall();
 #endif
 
-
+			//HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
 }
 
 static void setup() {
 	setupConfig();
-	HAL_UART_Receive_DMA(&FV_UART2, receiveBuffer, sizeof(receiveBuffer));
+	HAL_UART_Receive_DMA(&FV_UARTGPS, receiveBuffer, sizeof(receiveBuffer));
+	HAL_I2C_Master_Receive_DMA(&FV_I2C1,0xEE,i2cReceive,1);
+
+
 	AUDIO_Setup_Tone();
 
 	BARO_Setup();
@@ -113,9 +126,20 @@ static void setup() {
 
 	startTime = HAL_GetTick();
 
+
+
 }
 
 static void loop() {
+
+	if(gpsdata) {
+		gpsdata=0;
+
+		for (int i = 0; i < GPSDMABUFFER; ++i) {
+				SendDataGPSbuid(transferBuffer[i]);
+		}
+
+	}
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {
 		startwaitcomplete = true;

@@ -24,10 +24,11 @@
 #define VARIO
 //#define VARIO2
 
-#define ACCL
+//#define ACCL
 #define ACCLSMOOTH 10 //Lowpass filter level
-#define HUMID //enable humid sensor
+//#define HUMID //enable humid sensor
 
+//#define BUZZERDAC //use the DAC output
 #define STARTDELAY 6000 //the time delay before the process starts
 #define TAKEOFFVARIO 0.8 //0.4 //abs vario level to detect takeoff
 #define BUZZERZEROCLIMB -0.3 // Normal sink rate for glider is -0.9 m/s. At this value up to 0 m/s a "blip" sound is made
@@ -39,6 +40,9 @@
 #define BUZZERCLIMBING 0.2 // vario level to start giving climbing signal
 #define AUDIOSMOOTH 10 //smooth out audio changes
 #define ADAPTIVEVARIO //Adapts the vario low pass filter
+
 //#define TESTBUZZER
+
+
 
 #endif /* CONFIG_H_ */

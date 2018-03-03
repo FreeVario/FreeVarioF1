@@ -50,12 +50,12 @@ void AUDIO_Setup_Tone() {
 	 FV_TONEHALTMR->PSC  = SystemCoreClock/10000000;
 
 	 //DAC output
-
+#ifdef BUZZERDAC
 	 HAL_TIM_Base_Start(&FV_DACTMR);
 	 HAL_DAC_Start(&FV_DAC,FV_DAC_CHANNEL);
 	 HAL_DAC_Start_DMA(&FV_DAC, FV_DAC_CHANNEL, (uint32_t*)sine_wave_array, 32, DAC_ALIGN_12B_R);
 	 FV_DACHALTMR->PSC = SystemCoreClock/100000000;
-
+#endif
 
 
 }
@@ -74,12 +74,10 @@ void tone(float freq, int period) {
     FV_TONEHALTMR->ARR  = fv_tone_t;
 	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
 
-
+#ifdef BUZZERDAC
 	FV_DACHALTMR->ARR = 1/(float)freq * DACTMRMULTIPLIER;
-
-
 	FV_DACHALTMR->CR1 |= TIM_CR1_CEN;
-
+#endif
 }
 
 //changes tone while beeping
@@ -87,8 +85,9 @@ void dynaTone(float freq) {
 	uint16_t fv_tone_t = 1/(float)freq * PWMTMRMULTIPLIER;
 	 FV_TONEHALTMR->ARR  = fv_tone_t;
 	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
+#ifdef BUZZERDAC
 	FV_DACHALTMR->ARR = 1/(float)freq * DACTMRMULTIPLIER;
-
+#endif
 
 }
 
@@ -100,9 +99,9 @@ int millis() {
 void noTone() {
 
 	 FV_TONEHALTMR->CR1 = 0;
-	//FV_TONEHALTMR->FV_TONECCR =0;
+#ifdef BUZZERDAC
 	 FV_DACHALTMR->CR1=0;
-
+#endif
 }
 
 
