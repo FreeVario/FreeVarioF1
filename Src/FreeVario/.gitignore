@@ -1,3 +1,7 @@
-
-
-
+*
+!readme.md
+!Src
+!FreeVarioLib
+!FreeVarioLib/*
+!.gitignore
+!*.ioc
