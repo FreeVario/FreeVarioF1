@@ -31,6 +31,7 @@ uint32_t startTime=0;
 uint8_t gpsdata=0;
 int8_t i2cReceive[1];
 uint8_t sensorToken = 0;
+uint8_t errDetected=0;
 
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
@@ -43,8 +44,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 //check for values that goes out of scale
 void watchValues() {
 	if (currentVarioMPS >= 99 || currentVarioMPS <= -99){
-		currentVarioMPS = 99;
+		currentVarioMPS = 99; //prevent overload
 		BARO_Reset();
+
+		//this will stop the watchdog timer
+		//If the situation don't correct in time,
+		//the watchdog will restart the MPU
+		//This will cause a lost of USB connection.
+		//Not a grand solution
+		 errDetected++;
+
+	}else{
+		if(errDetected > 0) {
+			errDetected--;
+		}
 	}
 }
 
@@ -102,7 +115,7 @@ void run1000() {
 			AUDIO_TestToneCall();
 #endif
 
-			//HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
+			HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
 }
 
 static void setup() {
@@ -132,7 +145,7 @@ static void loop() {
 		}
 
 	}
-	//HAL_UART_Receive(&FV_UARTGPS, receiveBuffer, sizeof(receiveBuffer),2U);
+
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {
 		startwaitcomplete = true;
@@ -167,7 +180,9 @@ static void loop() {
 	takeoff = true;
 #endif
 #ifdef FV_IWDG
-	HAL_IWDG_Refresh ( &FV_IWDG ) ;
+	if(errDetected < 50){
+		HAL_IWDG_Refresh ( &FV_IWDG ) ;
+	}
 #endif
 	HAL_Delay(1);
 
