@@ -35,3 +35,5 @@ Rules:
 Only use the FreeVarioLib for development.
 Do not include main.c or config_hal.h 
 
+You have to add -u _printf_float to the c linker for Sprintf to work with floats
+See: http://www.openstm32.org/forumthread954
