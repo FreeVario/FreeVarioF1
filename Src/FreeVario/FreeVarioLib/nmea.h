@@ -12,8 +12,8 @@
 #define NMEA_H_
 #include "config.h"
 
-void NMEA_setPTAS1(double varioFt, double varioAvFt, double altitudeFt);
-void NMEA_setnmeaShortLXWP0(float varioAlt, float a);
+void NMEA_setPTAS1(double vario, double varioAv, double altitude);
+void NMEA_setnmeaShortLXWP0(float varioAlt, float varioMts);
 void NMEA_setNmeaLK8EX1(int rawPressure, int varioAlt, float climbRate, int temperature, int pbat);
 void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, int temperature, int humidity, float batVolt);
 void getCRC(char *buff);

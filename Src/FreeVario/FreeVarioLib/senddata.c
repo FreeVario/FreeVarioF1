@@ -39,6 +39,7 @@ void sendSensorData(){
 
 	NMEA_setnmeaShortLXWP0(currentAltitudeMtr, currentVarioMPS);
 	//CDC_Transmit_FS(nmeaVarioLXWP0, sizeof(nmeaVarioLXWP0));
+
 	strcat(BtBuffer,nmeaVarioLXWP0);
 
 
@@ -52,7 +53,6 @@ void sendSensorData(){
 
 #if defined(ACCL) && defined(HUMID)
 	NMEA_setNmeaPcProbe(accel_x,accel_y,accel_z,humidtemp,humidity,0);
-	//CDC_Transmit_FS(nmeaPcProbe, sizeof(nmeaPcProbe));
 	strcat(BtBuffer,nmeaPcProbe);
 
 #endif

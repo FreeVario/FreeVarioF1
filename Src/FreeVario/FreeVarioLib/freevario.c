@@ -113,7 +113,6 @@ void run1000() {
 static void setup() {
 	setupConfig();
 	HAL_UART_Receive_DMA(&FV_UARTGPS, receiveBuffer, sizeof(receiveBuffer));
-	HAL_I2C_Master_Receive_DMA(&FV_I2C1,0xEE,i2cReceive,1);
 
 
 	AUDIO_Setup_Tone();
@@ -125,8 +124,6 @@ static void setup() {
 	HAL_Delay(100);
 
 	startTime = HAL_GetTick();
-
-
 
 }
 
@@ -140,6 +137,10 @@ static void loop() {
 		}
 
 	}
+
+	//HAL_UART_Receive(&FV_UARTGPS, receiveBuffer, sizeof(receiveBuffer),2U);
+
+
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {
 		startwaitcomplete = true;

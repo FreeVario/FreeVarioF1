@@ -25,7 +25,6 @@
 
 #include "ms5611.h"
 #include <math.h>
-int8_t i2c1Receive[1];
 
 
 void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add) {
@@ -43,6 +42,7 @@ void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add
 	MS5611_readCalibration(hi2c, MS_Datastruct);
 
 
+	//HAL_I2C_Master_Receive_DMA(&FV_I2C1,adress + 1,&i2c1Receive,1);
 
 
 }
@@ -129,11 +129,6 @@ void MS5611_sendCommand(uint8_t cmd, uint8_t adress, I2C_HandleTypeDef *hi2c) {
 	}
 
 }
-
-void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c,uint8_t transferdirection,uint16_t AddrMatchCode){
-	HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
-}
-
 
 
 uint32_t MS5611_readnBytes(uint8_t nBytes, uint8_t adress,
