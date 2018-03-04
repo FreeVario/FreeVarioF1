@@ -48,4 +48,8 @@
 //Serial won't be available for serial data
 #define FV_AMI2C hi2c1
 
+//Watchdog timer
+#define FV_IWDG hiwdg
+
+
 #endif /* CONFIG_HAL_H_ */

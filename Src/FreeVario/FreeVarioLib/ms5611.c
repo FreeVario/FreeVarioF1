@@ -25,7 +25,7 @@
 
 #include "ms5611.h"
 #include <math.h>
-
+uint32_t timespec;
 
 void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add) {
 	MS_Datastruct->_T = 0;
@@ -35,15 +35,10 @@ void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add
 		MS_Datastruct->uC[k] = 69;
 	MS_Datastruct->adress = add;
 
-
 	MS5611_sendCommand(CMD_RESET, MS_Datastruct->adress, hi2c);
 
 	HAL_Delay(100);
 	MS5611_readCalibration(hi2c, MS_Datastruct);
-
-
-	//HAL_I2C_Master_Receive_DMA(&FV_I2C1,adress + 1,&i2c1Receive,1);
-
 
 }
 
@@ -54,6 +49,7 @@ void MS5611_Reset(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct) {
 }
 
 void MS5611_readPressure(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct) {
+
 	MS5611_readTemperature(hi2c, MS_Datastruct); //updates temperature _dT and _T
 	MS5611_sendCommand(CMD_CONV_D1_BASE + OSR * CONV_REG_SIZE,
 			MS_Datastruct->adress, hi2c);	//read sensor, prepare a data
@@ -75,8 +71,9 @@ void MS5611_readTemperature(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct) {
 	// NOTE: Be sure what you do! Notice that Delta 1C ~= Delta 2hPa
 	//****************
 
-	if (fabs(HAL_GetTick() - MS_Datastruct->_lastTime) < T_THR)
+	if (HAL_GetTick() - MS_Datastruct->_lastTime < T_THR)
 		return;
+
 	MS_Datastruct->_lastTime = HAL_GetTick();
 	//****************
 	MS5611_sendCommand(CMD_CONV_D2_BASE + OSR * CONV_REG_SIZE,
@@ -121,13 +118,12 @@ double MS5611_getAltitude(double pressure, double seaLevelPressure) {
 void MS5611_sendCommand(uint8_t cmd, uint8_t adress, I2C_HandleTypeDef *hi2c) {
 	uint8_t Buffer_Tx1[1];
 	Buffer_Tx1[0] = cmd;
-	if (HAL_I2C_Master_Transmit(hi2c, (uint16_t) adress, (uint8_t *) Buffer_Tx1,
-			1, 100) != HAL_OK) {
-		//	tprintf("\n\r Not working dumbass\n\r");
-	} else {
-		//	tprintf("\n\r Tx ok\n\r");
-	}
+	timespec=HAL_GetTick();
+	//extra timeout
+	while (HAL_I2C_Master_Transmit(hi2c, (uint16_t) adress, (uint8_t *) Buffer_Tx1,
+			1, 1000) != HAL_OK && (HAL_GetTick() - timespec <= 1000)) {
 
+	}
 }
 
 
@@ -137,10 +133,8 @@ uint32_t MS5611_readnBytes(uint8_t nBytes, uint8_t adress,
 	uint32_t data = 0;
 	uint8_t Buffer_Rx[nBytes];
 
-	if (HAL_I2C_Master_Receive(hi2c, (uint16_t) (adress + 1),
-			(uint8_t *) Buffer_Rx, nBytes, 100) != HAL_OK) {
-		//	tpr intf("\n\r Receive data failed\n\r");
-
+	while(HAL_I2C_Master_Receive(hi2c, (uint16_t) (adress + 1),
+			(uint8_t *) Buffer_Rx, nBytes, 1000) != HAL_OK) {
 	}
 
 	for (uint8_t i = 0; i < nBytes; i++) {

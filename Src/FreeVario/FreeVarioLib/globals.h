@@ -18,6 +18,7 @@ settings_t conf;
 extern I2C_HandleTypeDef FV_I2C1;
 extern UART_HandleTypeDef FV_UARTGPS;
 extern UART_HandleTypeDef FV_UARTBT;
+extern IWDG_HandleTypeDef FV_IWDG;
 
 //DHT TIMER
 extern TIM_HandleTypeDef FV_DHTTIMER;

@@ -24,7 +24,7 @@
 #define VARIO
 //#define VARIO2
 
-//#define ACCL
+#define ACCL
 #define ACCLSMOOTH 10 //Lowpass filter level
 //#define HUMID //enable humid sensor
 

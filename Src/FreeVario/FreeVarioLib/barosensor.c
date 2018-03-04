@@ -24,6 +24,7 @@ Queue_t VarioMPS;
 Queue_t AltitudeMtr;
 uint32_t vtime=0;
 int16_t count=0;
+uint32_t rtime=0;
 
 SD_MS5611 baro1;
 #if defined(VARIO2)
@@ -43,11 +44,15 @@ void BARO_Setup(){
 }
 
 void BARO_Reset(){
+
+	if (HAL_GetTick() - rtime >= 15000) { //prevents reset loop
 	MS5611_Reset( &FV_I2C1, &baro1);
 #if defined(VARIO2)
 	MS5611_Reset( &FV_I2C1, &baro2);
 #endif
-
+		BARO_Setup();
+	rtime = HAL_GetTick();
+	}
 }
 
 

@@ -20,11 +20,8 @@
 
 #define GPSDMABUFFER 120
 
-
 uint8_t receiveBuffer[GPSDMABUFFER];
 char transferBuffer[GPSDMABUFFER];
-
-
 
 uint32_t sc_timer=0;
 uint32_t sc_timer100=0;
@@ -33,31 +30,21 @@ uint8_t startwaitcomplete=0;
 uint32_t startTime=0;
 uint8_t gpsdata=0;
 int8_t i2cReceive[1];
-
-
+uint8_t sensorToken = 0;
 
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	strcpy(transferBuffer, receiveBuffer);
-
 	gpsdata =1;
-
 }
 
 
 //check for values that goes out of scale
 void watchValues() {
-	if (currentVarioMPS >= 99){
+	if (currentVarioMPS >= 99 || currentVarioMPS <= -99){
 		currentVarioMPS = 99;
 		BARO_Reset();
-
-	}
-
-	if (currentVarioMPS <= -99) {
-		currentVarioMPS = -99;
-		BARO_Reset();
-
 	}
 }
 
@@ -65,7 +52,6 @@ void watchValues() {
 //Called from main.c
 void FV_Run(){
 	setup();
-
 	while(1){
 		loop();
 	}
@@ -73,16 +59,25 @@ void FV_Run(){
 
 //fast loop
 void run10() {
-#if defined(VARIO)
-	Baro_Read();
-#endif
-#if defined(ACCL)
-	ACCL_Read();
-#endif
-
-
-
-	if (takeoff) makeVarioAudio((float)currentVarioMPS);
+	sensorToken++;
+	   switch(sensorToken) {
+	        case 1:
+				#if defined(VARIO)
+	        	Baro_Read();
+	        	#endif
+	        	break;
+	        case 2:
+				#if defined(ACCL)
+	        	ACCL_Read();
+				#endif
+	            break;
+	        case 3:
+	        	if (takeoff) makeVarioAudio((float)currentVarioMPS);
+	        	break;
+	    }
+	if (sensorToken >= 3) {
+	      sensorToken = 0;
+	}
 }
 
 //sendata loop
@@ -137,16 +132,13 @@ static void loop() {
 		}
 
 	}
-
 	//HAL_UART_Receive(&FV_UARTGPS, receiveBuffer, sizeof(receiveBuffer),2U);
-
-
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {
 		startwaitcomplete = true;
 	}
 
-	if (HAL_GetTick() >= (sc_timer + 20)) {
+	if (HAL_GetTick() >= (sc_timer + 10)) {
 		sc_timer = HAL_GetTick();
 		run10();
 
@@ -174,7 +166,9 @@ static void loop() {
 #else
 	takeoff = true;
 #endif
-
+#ifdef FV_IWDG
+	HAL_IWDG_Refresh ( &FV_IWDG ) ;
+#endif
 	HAL_Delay(1);
 
 }
