@@ -45,7 +45,7 @@ void MS5611_Setup(SD_MS5611* MS_Datastruct, uint8_t add) {
 
 void MS5611_Reset(SD_MS5611* MS_Datastruct) {
 	MS5611_sendCommand(CMD_RESET, MS_Datastruct);
-	HAL_Delay(100);
+	HAL_Delay(10);
 	MS5611_readCalibration( MS_Datastruct);
 }
 
@@ -120,8 +120,7 @@ void MS5611_sendCommand(uint8_t cmd, SD_MS5611* MS_Datastruct) {
 	HAL_StatusTypeDef result = HAL_I2C_Master_Transmit(MS_Datastruct->i2chelper.instance, (uint16_t) MS_Datastruct->adress, (uint8_t *) Buffer_Tx1,	1, 1000);
 
 	if (result == HAL_BUSY) { //use i2c helper to reset bus
-		//TODO: remove
-		HAL_GPIO_TogglePin(GPIOE, LD5_Pin);
+
 		I2C_ClearBusyFlagErratum( &MS_Datastruct->i2chelper, 1000);
 	}
 }

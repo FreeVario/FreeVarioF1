@@ -42,7 +42,7 @@
 void I2C_ClearBusyFlagErratum(I2C_Helper_t* i2c, uint32_t timeout)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-
+    HAL_GPIO_TogglePin(GPIOE, LD5_Pin);
     I2C_HandleTypeDef* handler = NULL;
 
     handler = i2c->instance;

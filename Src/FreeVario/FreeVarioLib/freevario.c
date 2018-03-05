@@ -41,13 +41,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 }
 
 
-//check for values that goes out of scale
-void watchValues() {
-	if (currentVarioMPS >= 99 || currentVarioMPS <= -99){
-		currentVarioMPS = 99; //prevent overload
-	}
-}
-
 
 //Called from main.c
 void FV_Run(){
@@ -85,11 +78,8 @@ void run100() {
 
 	calcVario();
 	if (startwaitcomplete) {
-		watchValues();
 		checkAdaptiveVario(currentVarioMPS);
 		sendSensorData();
-
-
 	}
 }
 

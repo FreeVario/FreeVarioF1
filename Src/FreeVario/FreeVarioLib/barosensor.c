@@ -19,6 +19,7 @@ extern float currentVarioMPS; //
 extern float cuttentVarioAvMPS;
 extern float currentAltitudeMtr;
 uint8_t takeoff=0;
+extern uint8_t startwaitcomplete;
 uint8_t vTriggerd;
 Queue_t VarioMPS;
 Queue_t AltitudeMtr;
@@ -56,13 +57,14 @@ void BARO_Setup(){
 void BARO_Reset(){
 
 	if (HAL_GetTick() - rtime >= 15000) { //prevents reset loop
-	MS5611_Reset( &baro1);
+		MS5611_Reset(&baro1);
 #if defined(VARIO2)
-	MS5611_Reset(&baro2);
+		MS5611_Reset(&baro2);
 #endif
 		BARO_Setup();
-	rtime = HAL_GetTick();
+		rtime = HAL_GetTick();
 	}
+
 }
 
 
@@ -93,9 +95,13 @@ void calcVario() {
     }else{
         currentVarioMPS = 0;
     }
-
-
-
+	if (startwaitcomplete) {
+		if (currentVarioMPS >= 99 || currentVarioMPS <= -99) {
+			currentVarioMPS = 9; //prevent overload
+			I2C_ClearBusyFlagErratum(&baro1.i2chelper, 1000); //reset the bus
+			MS5611_Reset(&baro1);
+		}
+	}
 
 }
 
