@@ -16,8 +16,11 @@
 #define FV_LED LD9_Pin
 #define FV_LED_GPIO	GPIOE
 
-//I2C channel
+//I2C channel 1
 #define FV_I2C1 hi2c1
+#define FV_I2C1_SCL_Pin I2C1_SCL_Pin
+#define FV_I2C1_SDA_Pin I2C1_SDA_Pin
+#define FV_I2CI_PORT GPIOB
 
 //GPS
 #define FV_UARTGPS huart2

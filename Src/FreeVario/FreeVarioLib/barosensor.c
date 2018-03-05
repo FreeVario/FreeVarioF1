@@ -35,9 +35,19 @@ SD_MS5611 baro2;
 
 
 void BARO_Setup(){
-	MS5611_Setup( &FV_I2C1, &baro1, MS5611_ADD1);
+
+	baro1.i2chelper.instance = &FV_I2C1;
+	baro1.i2chelper.sclPin = FV_I2C1_SCL_Pin;
+	baro1.i2chelper.sdaPin = FV_I2C1_SDA_Pin;
+    baro1.i2chelper.i2cPort = FV_I2CI_PORT;
+	MS5611_Setup( &baro1, MS5611_ADD1);
+
 #if defined(VARIO2)
-	MS5611_Setup( &FV_I2C1, &baro2, MS5611_ADD2);
+	baro2.i2chelper->instance = &FV_I2C1;
+	baro2.i2chelper->sclPin = FV_I2C1_SCL_Pin;
+	baro2.i2chelper->sdaPin = FV_I2C1_SDA_Pin;
+    baro2.i2chelper->i2cPort = &FV_I2CI_PORT;
+	MS5611_Setup(  &baro2, MS5611_ADD2);
 #endif
 	SO_setQueue(&VarioMPS, 10); //vario m/s
 	SO_setQueue(&AltitudeMtr, 10); //alitude in meters
@@ -46,9 +56,9 @@ void BARO_Setup(){
 void BARO_Reset(){
 
 	if (HAL_GetTick() - rtime >= 15000) { //prevents reset loop
-	MS5611_Reset( &FV_I2C1, &baro1);
+	MS5611_Reset( &baro1);
 #if defined(VARIO2)
-	MS5611_Reset( &FV_I2C1, &baro2);
+	MS5611_Reset(&baro2);
 #endif
 		BARO_Setup();
 	rtime = HAL_GetTick();
@@ -93,7 +103,7 @@ void calcVario() {
 void Baro_Read() {
 
 	count++; //Debug counter.
-	  MS5611_readPressure(&FV_I2C1, &baro1);
+	  MS5611_readPressure( &baro1);
 	  int32_t pressure = baro1.uP;
 
 	#if defined(VARIO2)
@@ -101,7 +111,7 @@ void Baro_Read() {
 	  double pressure1t;
 	  double pressure2t;
 
-	  MS5611_readPressure(&FV_I2C1, &baro2);
+	  MS5611_readPressure(&baro2);
 	  pressure2 = baro2.uP;
 
 	#if defined(VARIO2LEASTDEV)

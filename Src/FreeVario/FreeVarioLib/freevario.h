@@ -12,6 +12,7 @@
 #define FREEVARIO_H_
 #include "config.h"
 
+
 void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c,uint8_t transferdirection,uint16_t AddrMatchCode);
 void FV_Run();
 void run10();

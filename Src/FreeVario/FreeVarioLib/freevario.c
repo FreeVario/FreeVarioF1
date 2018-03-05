@@ -45,19 +45,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 void watchValues() {
 	if (currentVarioMPS >= 99 || currentVarioMPS <= -99){
 		currentVarioMPS = 99; //prevent overload
-		BARO_Reset();
-
-		//this will stop the watchdog timer
-		//If the situation don't correct in time,
-		//the watchdog will restart the MPU
-		//This will cause a lost of USB connection.
-		//Not a grand solution
-		 errDetected++;
-
-	}else{
-		if(errDetected > 0) {
-			errDetected--;
-		}
 	}
 }
 
@@ -73,23 +60,23 @@ void FV_Run(){
 //fast loop
 void run10() {
 	sensorToken++;
-	   switch(sensorToken) {
-	        case 1:
-				#if defined(VARIO)
-	        	Baro_Read();
-	        	#endif
-	        	break;
-	        case 2:
-				#if defined(ACCL)
-	        	ACCL_Read();
-				#endif
-	            break;
-	        case 3:
-	        	if (takeoff) makeVarioAudio((float)currentVarioMPS);
-	        	break;
-	    }
+	switch(sensorToken) {
+	case 1:
+#if defined(VARIO)
+		Baro_Read();
+#endif
+		break;
+	case 2:
+#if defined(ACCL)
+		ACCL_Read();
+#endif
+		break;
+	case 3:
+		if (takeoff) makeVarioAudio((float)currentVarioMPS);
+		break;
+	}
 	if (sensorToken >= 3) {
-	      sensorToken = 0;
+		sensorToken = 0;
 	}
 }
 
@@ -180,10 +167,16 @@ static void loop() {
 	takeoff = true;
 #endif
 #ifdef FV_IWDG
-	if(errDetected < 50){
+
 		HAL_IWDG_Refresh ( &FV_IWDG ) ;
-	}
+
 #endif
 	HAL_Delay(1);
 
 }
+
+
+
+
+
+

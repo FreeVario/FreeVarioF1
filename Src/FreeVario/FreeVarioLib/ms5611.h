@@ -12,6 +12,8 @@
 #define MS5611_H_
 
 #include "config.h"
+#include "i2chelper.h"
+
 #define N_PROM_PARAMS 6
 #define MS5611_ADD1 0xEE
 #define MS5611_ADD2 0xEC
@@ -27,20 +29,22 @@ typedef struct  {
 	uint16_t 	uC[N_PROM_PARAMS]; //also as above
 	uint32_t 	_lastTime;
 	uint8_t adress;
+	I2C_HandleTypeDef *hi2c;
+	I2C_Helper_t  i2chelper;
 } SD_MS5611;
 
 
 
 
-void MS5611_Setup(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct, uint8_t add);
-void MS5611_Reset(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct);
-void MS5611_sendCommand(uint8_t cmd,uint8_t adress, I2C_HandleTypeDef *hi2c);
-void MS5611_readPressure(I2C_HandleTypeDef *hi2c,SD_MS5611* MS_Datastruct);
-void MS5611_readTemperature(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct);
-void MS5611_readCalibration(I2C_HandleTypeDef *hi2c, SD_MS5611* MS_Datastruct);
+void MS5611_Setup(SD_MS5611* MS_Datastruct, uint8_t add);
+void MS5611_Reset(SD_MS5611* MS_Datastruct);
+void MS5611_sendCommand(uint8_t cmd,SD_MS5611* MS_Datastruct);
+void MS5611_readPressure(SD_MS5611* MS_Datastruct);
+void MS5611_readTemperature(SD_MS5611* MS_Datastruct);
+void MS5611_readCalibration( SD_MS5611* MS_Datastruct);
 void MS5611_getCalibration(uint16_t *C, SD_MS5611* MS_Datastruct);
 double MS5611_getAltitude(double pressure, double seaLevelPressure);
-uint32_t MS5611_readnBytes(uint8_t nBytes, uint8_t adress, I2C_HandleTypeDef *hi2c);
+uint32_t MS5611_readnBytes(uint8_t nBytes, SD_MS5611* MS_Datastruct);
 
 
 
