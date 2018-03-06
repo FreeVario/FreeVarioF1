@@ -253,7 +253,7 @@ static void MX_I2C1_Init(void)
 {
 
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x2010091A;
+  hi2c1.Init.Timing = 0x00401653;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -275,7 +275,7 @@ static void MX_I2C1_Init(void)
 
     /**Configure Digital filter 
     */
-  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 2) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
@@ -287,7 +287,7 @@ static void MX_I2C2_Init(void)
 {
 
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x2010091A;
+  hi2c2.Init.Timing = 0x00401653;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -309,7 +309,7 @@ static void MX_I2C2_Init(void)
 
     /**Configure Digital filter 
     */
-  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 2) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }

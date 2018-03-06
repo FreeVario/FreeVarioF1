@@ -18,6 +18,7 @@ extern int32_t realPressureAv; // pressure hpa * 100
 extern float currentVarioMPS; //
 extern float cuttentVarioAvMPS;
 extern float currentAltitudeMtr;
+extern uint8_t dataValid;
 uint8_t takeoff=0;
 extern uint8_t startwaitcomplete;
 uint8_t vTriggerd;
@@ -95,11 +96,15 @@ void calcVario() {
     }else{
         currentVarioMPS = 0;
     }
+    //Resets the Busy flag
 	if (startwaitcomplete) {
 		if (currentVarioMPS >= 99 || currentVarioMPS <= -99) {
 			currentVarioMPS = 9; //prevent overload
 			I2C_ClearBusyFlagErratum(&baro1.i2chelper, 1000); //reset the bus
 			MS5611_Reset(&baro1);
+			dataValid =0;
+		}else{
+			dataValid =1;
 		}
 	}
 

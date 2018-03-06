@@ -31,7 +31,7 @@ uint32_t startTime=0;
 uint8_t gpsdata=0;
 int8_t i2cReceive[1];
 uint8_t sensorToken = 0;
-uint8_t errDetected=0;
+uint8_t dataValid=1;
 
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
@@ -77,7 +77,7 @@ void run10() {
 void run100() {
 
 	calcVario();
-	if (startwaitcomplete) {
+	if (startwaitcomplete && dataValid) {
 		checkAdaptiveVario(currentVarioMPS);
 		sendSensorData();
 	}
@@ -157,9 +157,7 @@ static void loop() {
 	takeoff = true;
 #endif
 #ifdef FV_IWDG
-
 		HAL_IWDG_Refresh ( &FV_IWDG ) ;
-
 #endif
 	HAL_Delay(1);
 

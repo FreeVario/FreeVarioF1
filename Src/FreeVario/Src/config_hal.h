@@ -16,20 +16,44 @@
 #define FV_LED LD9_Pin
 #define FV_LED_GPIO	GPIOE
 
-//I2C channel 1
+// Master I2C channel
+/* Use this for the Baro and ACCL sensor
+ * Configure: Fast mode 400
+ * Disable the Analog filter if there are a lot of read errors
+ * Setting digital filter to 2 (or higher) will help a lot
+ */
 #define FV_I2C1 hi2c1
 #define FV_I2C1_SCL_Pin I2C1_SCL_Pin
 #define FV_I2C1_SDA_Pin I2C1_SDA_Pin
 #define FV_I2CI_PORT GPIOB
 
+
+//Secondary I2C channel
+/*
+ * Todo: implement Busy flag
+ */
+#define FV_I2C2 hi2c2
+
+
 //GPS
+/*
+ * Speed: set for correct speed GPS
+ * DMA: Enable DMA Channel with circular buffer
+ * and set Global interrupt
+ */
 #define FV_UARTGPS huart2
 
 
 //BT
+/*
+ * Set Correct speed
+ */
 #define FV_UARTBT huart3
 
 //HW timer and output for the piez o buzzer
+/*
+ * Timer with pwm output
+ */
 #define FV_TONETMR htim1
 #define FV_TONECHN TIM_CHANNEL_1
 #define FV_TONECCR CCR1
@@ -49,9 +73,12 @@
 //New AM232x I2C based humidity sensors I2C port
 //This will use the serial 1 connection on the FreeVario board.
 //Serial won't be available for serial data
-#define FV_AMI2C hi2c1
+#define FV_AMI2C FV_I2C2
 
 //Watchdog timer
+/*
+ * Set prescaler to 32
+ */
 #define FV_IWDG hiwdg
 
 
