@@ -37,7 +37,7 @@ void NMEA_setPTAS1(double vario, double varioAv, double altitude) {
 	   * TAS knots 0-200
 	   */
 
-  vario = vario * 3.28084 * 10 + 200;
+  vario = (vario * 3.28084 * 10) + 200;
   varioAv = varioAv * 3.28084 * 10 + 200;
   altitude = altitude * 3.28084 + 2000;
 

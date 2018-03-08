@@ -30,7 +30,7 @@
 
 //Secondary I2C channel
 /*
- * Todo: implement Busy flag
+ * Todo: also implement Busy flag
  */
 #define FV_I2C2 hi2c2
 
@@ -40,6 +40,7 @@
  * Speed: set for correct speed GPS
  * DMA: Enable DMA Channel with circular buffer
  * and set Global interrupt
+ * Testing: Disabled overrun and dma error.
  */
 #define FV_UARTGPS huart2
 
@@ -47,6 +48,7 @@
 //BT
 /*
  * Set Correct speed
+ * DMA not needed
  */
 #define FV_UARTBT huart3
 

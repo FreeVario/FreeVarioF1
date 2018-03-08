@@ -18,17 +18,17 @@
 #include <stdio.h>
 
 
-#define GPSDMABUFFER 120
+#define GPSDMABUFFER 256
 
-uint8_t receiveBuffer[GPSDMABUFFER];
-char transferBuffer[GPSDMABUFFER];
+  uint8_t  receiveBuffer[GPSDMABUFFER];
+  uint8_t  transferBuffer[GPSDMABUFFER];
 
 uint32_t sc_timer=0;
 uint32_t sc_timer100=0;
 uint32_t sc_timer1000=0;
 uint8_t startwaitcomplete=0;
 uint32_t startTime=0;
-uint8_t gpsdata=0;
+volatile uint8_t gpsdata=0;
 int8_t i2cReceive[1];
 uint8_t sensorToken = 0;
 uint8_t dataValid=1;
@@ -36,7 +36,15 @@ uint8_t dataValid=1;
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-	strcpy(transferBuffer, receiveBuffer);
+	memcpy(&transferBuffer, &receiveBuffer, sizeof( receiveBuffer));
+
+//	for (int i = 0; i < GPSDMABUFFER; ++i) {
+					//SendDataGPSbuid(receiveBuffer[i]);
+//					transferBuffer[i] = receiveBuffer[i];
+
+//	}
+
+
 	gpsdata =1;
 }
 
@@ -81,6 +89,7 @@ void run100() {
 		checkAdaptiveVario(currentVarioMPS);
 		sendSensorData();
 	}
+
 }
 
 //slow loop
@@ -97,7 +106,7 @@ void run1000() {
 
 static void setup() {
 	setupConfig();
-	HAL_UART_Receive_DMA(&FV_UARTGPS, receiveBuffer, sizeof(receiveBuffer));
+	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
 
 
 	AUDIO_Setup_Tone();
@@ -116,6 +125,7 @@ static void loop() {
 
 	if(gpsdata) {
 		gpsdata=0;
+
 
 		for (int i = 0; i < GPSDMABUFFER; ++i) {
 				SendDataGPSbuid(transferBuffer[i]);

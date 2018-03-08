@@ -15,8 +15,9 @@
 #include <stdio.h>
 
 #define GPSBUFFER 120
+#define BTBUFFER 1024 //lower will crash when USB connected
 char sendBuffer[GPSBUFFER];
-char  BtBuffer[256];
+char  BtBuffer[BTBUFFER];
 static int y;
 
 extern float currentVarioMPS;
@@ -31,21 +32,33 @@ extern float accel_z;
 extern float humidity;
 extern float humidtemp; //TODO: temp set from whats available
 
+//Protection against buffer overflow
+void strBTCat(char * stradd) {
+
+	if (strlen(BtBuffer) + strlen(stradd) < BTBUFFER ) { //then safe to cat
+		strcat(BtBuffer,stradd);
+	} else { //clear it, data is old
+		memset(BtBuffer, 0, strlen(BtBuffer));
+		HAL_GPIO_TogglePin(GPIOE, LD3_Pin);
+	}
+
+}
+
 //send of data
 void sendSensorData(){
 
 	NMEA_setnmeaShortLXWP0(currentAltitudeMtr, currentVarioMPS);
-	strcat(BtBuffer,nmeaVarioLXWP0);
+	strBTCat(nmeaVarioLXWP0);
 
 	NMEA_setNmeaLK8EX1(realPressureAv, currentAltitudeMtr,  currentVarioMPS, humidtemp, 0);
-	strcat(BtBuffer,nmeaVarioLK8EX1);
+	strBTCat(nmeaVarioLK8EX1);
 
-	NMEA_setPTAS1(currentAltitudeMtr, cuttentVarioAvMPS, currentAltitudeMtr);
-	strcat(BtBuffer,nmeaPTAS1);
+	NMEA_setPTAS1(currentVarioMPS, cuttentVarioAvMPS, currentAltitudeMtr);
+	strBTCat(nmeaPTAS1);
 
 #if defined(ACCL) && defined(HUMID)
 	NMEA_setNmeaPcProbe(accel_x,accel_y,accel_z,humidtemp,humidity,0);
-	strcat(BtBuffer,nmeaPcProbe);
+	strBTCat(nmeaPcProbe);
 
 #endif
 
@@ -54,12 +67,13 @@ void sendSensorData(){
 }
 
 void sendsData(char* txbuffer) {
-	CDC_Transmit_FS(txbuffer, strlen(txbuffer));
-	HAL_UART_Transmit(&FV_UARTBT,txbuffer, strlen(txbuffer),0xff);
+	CDC_Transmit_FS(txbuffer, (uint16_t)strlen(txbuffer));
+
+	HAL_UART_Transmit(&FV_UARTBT,(uint8_t *)txbuffer, strlen(txbuffer),0xff);
 	memset(txbuffer, 0, strlen(txbuffer));
 }
 
-void SendDataGPSbuid(char c) {                                         // GPSbuffer[] is global
+void SendDataGPSbuid(char * c) {                                         // GPSbuffer[] is global
 
   static char q;
   static bool flag = false;
@@ -84,8 +98,8 @@ void SendDataGPSbuid(char c) {                                         // GPSbuf
   if (flag) {                                                   // test for end of line and if the right GPSbuffer
     flag = false;                                               // reset for next time
 
-   sendsData(sendBuffer);
-
+  // sendsData(sendBuffer);
+    strBTCat(sendBuffer);
     memset(sendBuffer, 0, strlen(sendBuffer));
   }
 }

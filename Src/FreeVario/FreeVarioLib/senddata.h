@@ -13,10 +13,11 @@
 #define SENDDATA_H_
 #include "config.h"
 
-
+void strBTCat(char * stradd);
 
 void sendSensorData(); //manager
-void SendDataGPSbuid(char c); //team lead
+void SendDataGPSbuid(char * c); //team lead
 void sendsData(char* txbuffer); //actually does the work
+
 
 #endif /* SENDDATA_H_ */
