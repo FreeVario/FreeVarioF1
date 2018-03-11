@@ -19,7 +19,7 @@
 #include "stackops.h"
 #include "globals.h"
 
-#define SENDBUFFER 1024
+
 
 #define VARIO
 //#define VARIO2

@@ -11,8 +11,8 @@
 
 #include "senddata.h"
 #include "nmea.h"
-#include <string.h>
-#include <stdio.h>
+#include "stdio.h"
+#include "string.h"
 
 #define GPSBUFFER 120
 #define BTBUFFER 1024 //lower will crash when USB connected

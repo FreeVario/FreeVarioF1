@@ -24,7 +24,7 @@
 #define T_THR 1000
 
 #include "ms5611.h"
-#include <math.h>
+#include "math.h"
 
 
 void MS5611_Setup(SD_MS5611* MS_Datastruct, uint8_t add) {
@@ -62,7 +62,10 @@ void MS5611_readPressure( SD_MS5611* MS_Datastruct) {
 
 	int64_t SENS = (int64_t) MS_Datastruct->uC[1 - 1] * 32768
 			+ (int64_t) MS_Datastruct->uC[3 - 1] * MS_Datastruct->_dT / 256;
-	MS_Datastruct->uP = (D1 * SENS / 2097152 - OFF) / 32768;
+
+	if(D1 != '\0'){
+		MS_Datastruct->uP = (D1 * SENS / 2097152 - OFF) / 32768;
+	}
 
 }
 
@@ -131,12 +134,27 @@ uint32_t MS5611_readnBytes(uint8_t nBytes, SD_MS5611* MS_Datastruct) {
 	uint32_t data = 0;
 	uint8_t Buffer_Rx[nBytes];
 
-	while(HAL_I2C_Master_Receive(MS_Datastruct->i2chelper.instance, (uint16_t) (MS_Datastruct->adress + 1),
-			(uint8_t *) Buffer_Rx, nBytes, 1000) != HAL_OK) {
+
+	for (uint8_t i = 0; i < nBytes; i++) { //init array in case of null values
+		Buffer_Rx[i] = 0;
 	}
 
-	for (uint8_t i = 0; i < nBytes; i++) {
-		data = (data << 8) + Buffer_Rx[i];
+	if (HAL_I2C_GetState(MS_Datastruct->i2chelper.instance)
+			== HAL_I2C_STATE_READY) {
+		HAL_StatusTypeDef result = HAL_I2C_Master_Receive(
+				MS_Datastruct->i2chelper.instance,
+				(uint16_t) (MS_Datastruct->adress + 1), (uint8_t *) Buffer_Rx,
+				nBytes, 1000);
+
+		if (result == HAL_OK) { //this saved crashes
+
+			for (uint8_t i = 0; i < nBytes; i++) {
+				data = (data << 8) + Buffer_Rx[i];
+			}
+		} else if (result == HAL_BUSY) { //this should never happen, yet it does.
+			I2C_ClearBusyFlagErratum(&MS_Datastruct->i2chelper, 1000);
+		}
+
 	}
 
 	return data;

@@ -18,10 +18,10 @@
 #include <stdio.h>
 
 
-#define GPSDMABUFFER 256
+#define GPSDMABUFFER 128
 
-  uint8_t  receiveBuffer[GPSDMABUFFER];
-  uint8_t  transferBuffer[GPSDMABUFFER];
+uint8_t  receiveBuffer[GPSDMABUFFER*2];
+uint8_t  transferBuffer[GPSDMABUFFER];
 
 uint32_t sc_timer=0;
 uint32_t sc_timer100=0;
@@ -29,7 +29,6 @@ uint32_t sc_timer1000=0;
 uint8_t startwaitcomplete=0;
 uint32_t startTime=0;
 volatile uint8_t gpsdata=0;
-int8_t i2cReceive[1];
 uint8_t sensorToken = 0;
 uint8_t dataValid=1;
 
@@ -38,17 +37,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	memcpy(&transferBuffer, &receiveBuffer, sizeof( receiveBuffer));
 
-//	for (int i = 0; i < GPSDMABUFFER; ++i) {
-					//SendDataGPSbuid(receiveBuffer[i]);
-//					transferBuffer[i] = receiveBuffer[i];
-
-//	}
-
-
 	gpsdata =1;
 }
 
+void HAL_UART_DMARxHalfCplt(UART_HandleTypeDef *UartHandle)
+{
+	memcpy(&transferBuffer, &receiveBuffer, sizeof( receiveBuffer));
 
+	gpsdata =1;
+}
 
 //Called from main.c
 void FV_Run(){
@@ -104,7 +101,7 @@ void run1000() {
 			HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
 }
 
-static void setup() {
+void setup() {
 	setupConfig();
 	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
 
@@ -121,7 +118,7 @@ static void setup() {
 
 }
 
-static void loop() {
+void loop() {
 
 	if(gpsdata) {
 		gpsdata=0;
@@ -130,7 +127,6 @@ static void loop() {
 		for (int i = 0; i < GPSDMABUFFER; ++i) {
 				SendDataGPSbuid(transferBuffer[i]);
 		}
-
 	}
 
 
