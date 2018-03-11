@@ -39,12 +39,12 @@ void strBTCat(char * stradd) {
 		strcat(BtBuffer,stradd);
 	} else { //clear it, data is old
 		memset(BtBuffer, 0, strlen(BtBuffer));
-		HAL_GPIO_TogglePin(GPIOE, LD3_Pin);
+
 	}
 
 }
 
-//send of data
+//send all data
 void sendSensorData(){
 
 	NMEA_setnmeaShortLXWP0(currentAltitudeMtr, currentVarioMPS);

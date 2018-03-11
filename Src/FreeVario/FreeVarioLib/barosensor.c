@@ -9,7 +9,6 @@
 */
 
 #include "barosensor.h"
-#include "ms5611.h"
 #include "stackops.h"
 #include <math.h>
 
@@ -27,6 +26,7 @@ Queue_t AltitudeMtr;
 uint32_t vtime=0;
 int16_t count=0;
 uint32_t rtime=0;
+uint32_t berrors=0;
 
 SD_MS5611 baro1;
 #if defined(VARIO2)
@@ -86,6 +86,7 @@ float getAltitudeMt() {
 void calcVario() {
 
     currentAltitudeMtr = getAltitudeMt();
+
     SO_enqueue(&AltitudeMtr, currentAltitudeMtr);
 
 
@@ -96,31 +97,52 @@ void calcVario() {
     }else{
         currentVarioMPS = 0;
     }
-    //Resets the Busy flag
+
+
+}
+//Check for erratic values
+uint32_t getCleanValues(SD_MS5611  baro) {
+	uint32_t pressure = 0;
+
 	if (startwaitcomplete) {
-		if (currentVarioMPS >= 99 || currentVarioMPS <= -99) {
-			currentVarioMPS = 9; //prevent overload
-			I2C_ClearBusyFlagErratum(&baro1.i2chelper, 1000); //reset the bus
-			MS5611_Reset(&baro1);
-			dataValid =0;
-		}else{
-			dataValid =1;
+		if (fabs(realPressureAv - baro.uP) < 5000) {
+			pressure = baro.uP;
+			berrors = 0;
+		} else { //invalid data
+			I2C_ClearBusyFlagErratum(&baro.i2chelper, 1000);
+			MS5611_Reset(&baro);
+			berrors++;
+			pressure = realPressureAv;
+			if (berrors > 100) { //give it up
+				pressure = baro.uP;
+			}
+
 		}
+
+	} else {
+
+		pressure = baro.uP;
 	}
+
+	return pressure;
 
 }
 
-//This is called at about 20ms
+//This is called at about 30ms
 void Baro_Read() {
 
 	count++; //Debug counter.
 	  MS5611_readPressure( &baro1);
-	  int32_t pressure = baro1.uP;
+	  int32_t pressure=getCleanValues(baro1);
 
 	#if defined(VARIO2)
-	  double pressure2;
+
+	  int32_t pressure2=getCleanValues(baro2);;
 	  double pressure1t;
 	  double pressure2t;
+
+
+
 
 	  MS5611_readPressure(&baro2);
 	  pressure2 = baro2.uP;

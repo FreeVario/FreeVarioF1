@@ -39,6 +39,9 @@
     return ret;
 }
 
+
+
+
 void I2C_ClearBusyFlagErratum(I2C_Helper_t* i2c, uint32_t timeout)
 {
     GPIO_InitTypeDef GPIO_InitStructure;

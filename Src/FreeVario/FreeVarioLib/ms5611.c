@@ -53,8 +53,11 @@ void MS5611_readPressure( SD_MS5611* MS_Datastruct) {
 
 	MS5611_readTemperature( MS_Datastruct); //updates temperature _dT and _T
 	MS5611_sendCommand(CMD_CONV_D1_BASE + OSR * CONV_REG_SIZE,MS_Datastruct);	//read sensor, prepare a data
-	HAL_Delay(1 + 2 * OSR); 		//wait at least 8.33us for full oversampling
+	HAL_Delay(1 + 2 * OSR);
+	//if the second send command is to soon, the I2C bus will lockup in BUSY state
+
 	MS5611_sendCommand(CMD_ADC_READ, MS_Datastruct);
+
 	uint32_t D1 = MS5611_readnBytes(NBYTES_CONV, MS_Datastruct);
 
 	int64_t OFF = (int64_t) MS_Datastruct->uC[2 - 1] * 65536
@@ -63,8 +66,10 @@ void MS5611_readPressure( SD_MS5611* MS_Datastruct) {
 	int64_t SENS = (int64_t) MS_Datastruct->uC[1 - 1] * 32768
 			+ (int64_t) MS_Datastruct->uC[3 - 1] * MS_Datastruct->_dT / 256;
 
-	if(D1 != '\0'){
-		MS_Datastruct->uP = (D1 * SENS / 2097152 - OFF) / 32768;
+	if(D1 != '\0' && D1 != 0){
+
+			MS_Datastruct->uP = (D1 * SENS / 2097152 - OFF) / 32768;
+
 	}
 
 }
@@ -119,7 +124,7 @@ void MS5611_sendCommand(uint8_t cmd, SD_MS5611* MS_Datastruct) {
 	uint8_t Buffer_Tx1[1];
 	Buffer_Tx1[0] = cmd;
 
-	//extra timeout
+
 	HAL_StatusTypeDef result = HAL_I2C_Master_Transmit(MS_Datastruct->i2chelper.instance, (uint16_t) MS_Datastruct->adress, (uint8_t *) Buffer_Tx1,	1, 1000);
 
 	if (result == HAL_BUSY) { //use i2c helper to reset bus
@@ -139,8 +144,8 @@ uint32_t MS5611_readnBytes(uint8_t nBytes, SD_MS5611* MS_Datastruct) {
 		Buffer_Rx[i] = 0;
 	}
 
-	if (HAL_I2C_GetState(MS_Datastruct->i2chelper.instance)
-			== HAL_I2C_STATE_READY) {
+	if (HAL_I2C_GetState(MS_Datastruct->i2chelper.instance)	== HAL_I2C_STATE_READY) {
+
 		HAL_StatusTypeDef result = HAL_I2C_Master_Receive(
 				MS_Datastruct->i2chelper.instance,
 				(uint16_t) (MS_Datastruct->adress + 1), (uint8_t *) Buffer_Rx,
@@ -151,9 +156,20 @@ uint32_t MS5611_readnBytes(uint8_t nBytes, SD_MS5611* MS_Datastruct) {
 			for (uint8_t i = 0; i < nBytes; i++) {
 				data = (data << 8) + Buffer_Rx[i];
 			}
-		} else if (result == HAL_BUSY) { //this should never happen, yet it does.
+
+
+		}else{
 			I2C_ClearBusyFlagErratum(&MS_Datastruct->i2chelper, 1000);
+
 		}
+
+	}else{
+		I2C_ClearBusyFlagErratum(&MS_Datastruct->i2chelper, 1000);
+
+	}
+
+	if(data == '\0' || data==0 ) {
+		MS5611_Reset(MS_Datastruct);
 
 	}
 

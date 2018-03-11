@@ -12,6 +12,7 @@
 #ifndef BAROSENSOR_H_
 #define BAROSENSOR_H_
 #include "config.h"
+#include "ms5611.h"
 
 extern int32_t realPressureAv;
 
@@ -21,6 +22,7 @@ void Baro_Read();
 float getAltitudeFt();
 float getAltitudeMt();
 void calcVario();
+uint32_t getCleanValues(SD_MS5611  baro);
 void checkAdaptiveVario(float vario);
 
 
