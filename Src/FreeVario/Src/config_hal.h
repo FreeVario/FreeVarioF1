@@ -76,6 +76,7 @@
 //This will use the serial 1 connection on the FreeVario board.
 //Serial won't be available for serial data
 #define FV_AMI2C FV_I2C2
+#define FV_OLEDI2C FV_I2C2
 
 //Watchdog timer
 /*

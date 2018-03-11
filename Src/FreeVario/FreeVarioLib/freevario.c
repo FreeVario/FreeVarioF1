@@ -14,6 +14,7 @@
 #include "accelerometer.h"
 #include "humidity.h"
 #include "senddata.h"
+#include "ssd1306.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -91,6 +92,9 @@ void run100() {
 
 //slow loop
 void run1000() {
+	if (startwaitcomplete && dataValid) {
+		showVarioData();
+	}
 #if defined(HUMID)
 	HUMID_Read();
 #endif
@@ -99,6 +103,24 @@ void run1000() {
 #endif
 
 			HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
+
+}
+
+
+void showVarioData(){
+	    SSD1306_Fill (0);  // fill the display with black color
+		SSD1306_UpdateScreen(); // update screen
+		char vals[16];
+		SSD1306_GotoXY (10,10);  // goto 10, 10
+        sprintf(vals,"%2.2f m/s",currentVarioMPS);
+		SSD1306_Puts (vals, &Font_11x18, 1);  // print Hello
+
+		SSD1306_GotoXY (10, 30);
+		 sprintf(vals,"%5.2f m",currentAltitudeMtr);
+		SSD1306_Puts (vals, &Font_11x18, 1);
+
+		SSD1306_UpdateScreen(); // update screen
+
 }
 
 void setup() {
@@ -115,6 +137,9 @@ void setup() {
 	HAL_Delay(100);
 
 	startTime = HAL_GetTick();
+
+	SSD1306_Init ();  // initialize the diaply
+
 
 }
 

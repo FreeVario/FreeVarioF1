@@ -27,6 +27,8 @@ uint32_t vtime=0;
 int16_t count=0;
 uint32_t rtime=0;
 uint32_t berrors=0;
+int32_t rawPressurePrev = 0; //previous direct reading
+int32_t rawPressurePrev2 = 0;
 
 SD_MS5611 baro1;
 #if defined(VARIO2)
@@ -45,10 +47,10 @@ void BARO_Setup(){
 	MS5611_Setup( &baro1, MS5611_ADD1);
 
 #if defined(VARIO2)
-	baro2.i2chelper->instance = &FV_I2C1;
-	baro2.i2chelper->sclPin = FV_I2C1_SCL_Pin;
-	baro2.i2chelper->sdaPin = FV_I2C1_SDA_Pin;
-    baro2.i2chelper->i2cPort = &FV_I2CI_PORT;
+	baro2.i2chelper.instance = &FV_I2C1;
+	baro2.i2chelper.sclPin = FV_I2C1_SCL_Pin;
+	baro2.i2chelper.sdaPin = FV_I2C1_SDA_Pin;
+    baro2.i2chelper.i2cPort = FV_I2CI_PORT;
 	MS5611_Setup(  &baro2, MS5611_ADD2);
 #endif
 	SO_setQueue(&VarioMPS, 10); //vario m/s
@@ -132,52 +134,41 @@ uint32_t getCleanValues(SD_MS5611  baro) {
 void Baro_Read() {
 
 	count++; //Debug counter.
-	  MS5611_readPressure( &baro1);
-	  int32_t pressure=getCleanValues(baro1);
+	MS5611_readPressure(&baro1);
+	int32_t pressure = getCleanValues(baro1);
 
-	#if defined(VARIO2)
+#if defined(VARIO2)
+	MS5611_readPressure(&baro2);
+	int32_t pressure2 = getCleanValues(baro2);
+	int32_t pressure1t;
+	int32_t pressure2t;
 
-	  int32_t pressure2=getCleanValues(baro2);;
-	  double pressure1t;
-	  double pressure2t;
+#if defined(VARIO2LEASTDEV)
+	int32_t diff = rawPressurePrev - pressure;
+	int32_t diff2 = rawPressurePrev2 - pressure2;
 
+	//alter the sensor reading
+	//This method is to filter electrical noise
+	if (fabs(diff) > fabs(diff2)) { //if the primary has more deviation use the deviation of the secondary sensor
+		pressure1t = rawPressurePrev + diff2;
+		pressure2t = pressure2;
 
+	} else {
+		pressure2t = rawPressurePrev2 + diff;
+		pressure1t = pressure;
+	}
+	rawPressurePrev = pressure;
+	rawPressurePrev2 = pressure2;
+	pressure = (pressure1t + pressure2t) / 2;
 
+#else
 
-	  MS5611_readPressure(&baro2);
-	  pressure2 = baro2.uP;
+	pressure = (pressure + pressure2) / 2;
 
-	#if defined(VARIO2LEASTDEV)
-	  double diff = rawPressurePrev - pressure;
-	  double diff2 = rawPressurePrev2 - pressure2;
-
-	  //alter the sensor reading
-	  if (fabs(diff) > fabs(diff2)) { //if the primary has more deviation use the deviation of the secondary sensor
-	    pressure1t =  rawPressurePrev + diff2;
-	    pressure2t = pressure2;
-
-	  } else {
-	    pressure2t = rawPressurePrev2 + diff;
-	    pressure1t = pressure;
-
-	  }
-	  rawPressurePrev = pressure;
-	  rawPressurePrev2 = pressure2;
-	  pressure = (pressure1t + pressure2t) / 2;
-
-
-	#else
-
-	  pressure = (pressure + pressure2) / 2;
-
-	#endif
-	#endif
-
+#endif
+#endif
 
 	  realPressureAv = (conf.variosmooth * realPressureAv + pressure) / (conf.variosmooth + 1);
-
-
-
 
 	}
 

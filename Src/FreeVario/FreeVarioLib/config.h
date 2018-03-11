@@ -22,7 +22,8 @@
 
 
 #define VARIO
-//#define VARIO2
+#define VARIO2
+#define VARIO2LEASTDEV  //use least deviation method
 
 #define ACCL
 #define ACCLSMOOTH 10 //Lowpass filter level
