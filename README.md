@@ -1,6 +1,10 @@
 ## Welcome to FreeVario
 
 Freevario is an opensource device to provides telemetry data to any vario based program such as XCSoar or XCTrack via bluetooth or wifi. It is based on de STM32F3 processor. The project includes the board Eagle design and source code.
+<p align="center">
+  <img src="Doc/freevario.png" width="350"/>
+  <img src="Doc/freevarioinside.png" width="350"/>
+</p>
 
 ### Features:
 
