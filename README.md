@@ -9,7 +9,8 @@ Freevario is an opensource device to provides telemetry data to any vario based 
 ### Features:
 
 Bluetooth, Serial or USB OTG streaming<br>
-Configuration via Bluetooth, USB or Serial <br>
+Solar charger <br>
+Power bank (200mA) <br>
 Dual pressure sensor support <br>
 Adaptive Vario* <br>
 Humidity sensor <br>
