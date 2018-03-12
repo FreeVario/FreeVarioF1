@@ -84,5 +84,20 @@
  */
 #define FV_IWDG hiwdg
 
+/*
+ * Power management
+ *
+ */
+
+#define FV_ISCHARGEDPIN GPIO_PIN_15
+#define FV_ISCHARGEDPORT GPIOA
+
+#define FV_ISCHARGINGPIN GPIO_PIN_8
+#define FV_ISCHARGINGPORT GPIOB
+
+//ADC for reading internal vBat Channel
+//ADC1 needs to be enabled for it
+#define FV_HALADC hadc1
+
 
 #endif /* CONFIG_HAL_H_ */
