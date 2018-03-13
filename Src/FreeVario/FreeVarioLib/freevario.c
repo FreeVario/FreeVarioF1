@@ -15,6 +15,7 @@
 #include "humidity.h"
 #include "senddata.h"
 #include "display.h"
+#include "buttons.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -58,6 +59,7 @@ void FV_Run(){
 
 //fast loop
 void run10() {
+	BTN_Read();
 	sensorToken++;
 	switch(sensorToken) {
 	case 1:
@@ -134,11 +136,12 @@ void loop() {
 	if(gpsdata) {
 		gpsdata=0;
 
-
 		for (int i = 0; i < GPSDMABUFFER; ++i) {
 				SendDataGPSbuid(transferBuffer[i]);
 		}
 	}
+
+
 
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {

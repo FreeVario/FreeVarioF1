@@ -11,7 +11,7 @@
 #include "display.h"
 #include "ssd1306.h"
 
-uint8_t dispmode=0;
+int8_t dispmode=0;
 uint8_t refreshcount=0;
 extern ADC_HandleTypeDef FV_HALADC;
 
@@ -50,6 +50,21 @@ void DISP_SetMode(uint8_t mode){
 	dispmode=mode;
 }
 
+void DISP_NextMode(){
+	dispmode++;
+	if(dispmode > DISPITEMS){
+		dispmode=0;
+	}
+	DISP_Update();
+}
+
+void DISP_PrevMode(){
+	dispmode--;
+	if(dispmode < 0){
+		dispmode = DISPITEMS;
+	}
+	DISP_Update();
+}
 
 void showVarioData(){
 
