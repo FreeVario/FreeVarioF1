@@ -120,7 +120,7 @@ void setup() {
 	ACCL_Setup();
 	HUMID_Setup();
 	DISP_Setup();
-	DISP_SetMode(DISPPOWERDATA);
+	DISP_SetMode(DISPVARIODATA);
 
 	HAL_Delay(100);
 

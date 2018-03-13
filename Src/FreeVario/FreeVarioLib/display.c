@@ -12,6 +12,7 @@
 #include "ssd1306.h"
 
 uint8_t dispmode=0;
+uint8_t refreshcount=0;
 extern ADC_HandleTypeDef FV_HALADC;
 
 void DISP_Setup(){
@@ -24,9 +25,12 @@ void DISP_Setup(){
 }
 
 void DISP_Update(){
-
-    SSD1306_Fill (0);  // fill the display with black color
-	SSD1306_UpdateScreen(); // update screen
+	refreshcount++;
+	if (refreshcount > 10) {
+		SSD1306_Fill(0);  //not needed if only characters replaced
+		SSD1306_UpdateScreen();
+		refreshcount=0;
+	}
 
 	switch(dispmode) {
 	case DISPPOWERDATA:
@@ -34,6 +38,9 @@ void DISP_Update(){
 		break;
 	case DISPVARIODATA:
 		showVarioData();
+		break;
+	case DISPWEATHERDATA:
+		showWeatherData();
 		break;
 	}
 
@@ -48,12 +55,25 @@ void showVarioData(){
 
 		char vals[12];
 		SSD1306_GotoXY (10,10);  // goto 10, 10
-        sprintf(vals,"%2.2f m/s",currentVarioMPS);
+        sprintf(vals,"%+1.2f m/s",currentVarioMPS);
 		SSD1306_Puts (vals, &Font_11x18, 1);  // print Hello
 		SSD1306_GotoXY (10, 30);
-		 sprintf(vals,"%5.2f m",currentAltitudeMtr);
+		 sprintf(vals,"%05.2f m",currentAltitudeMtr);
 		SSD1306_Puts (vals, &Font_11x18, 1);
 		SSD1306_UpdateScreen(); // update screen
+
+}
+
+void showWeatherData(){
+	char vals[12];
+	SSD1306_GotoXY (10,10);  // goto 10, 10
+    sprintf(vals,"%0d hp",(int)realPressureAv/100);
+	SSD1306_Puts (vals, &Font_11x18, 1);  // print Hello
+	SSD1306_GotoXY (10, 30);
+	 sprintf(vals,"%02.1f%% %02.fC",humidity,humidtemp);
+	SSD1306_Puts (vals, &Font_11x18, 1);
+	SSD1306_UpdateScreen(); // update screen
+
 
 }
 
@@ -71,11 +91,16 @@ void showPowerData(){
 			SSD1306_Puts ("F-knows", &Font_11x18, 1);
 		}
 
+
 		SSD1306_GotoXY (10, 30);
 		if (HAL_ADC_PollForConversion(&FV_HALADC,100) == HAL_OK) {
 
-				uint32_t vbat = HAL_ADC_GetValue(&FV_HALADC);
-				sprintf(vals,"%1.2f V",(double)vbat/1000);
+				uint32_t cnv = HAL_ADC_GetValue(&FV_HALADC);
+				//double vbat = (double)( (cnv * 2 * 3300) / 0xfff)/1000;
+				//TODO: figure out the conversion, chek for power draining due to measurement
+
+				double vbat = (double) cnv /250;
+				sprintf(vals,"%2.2f V",(double)vbat);
 				SSD1306_Puts (vals, &Font_11x18, 1);
 
 		}

@@ -97,6 +97,7 @@
 
 //ADC for reading internal vBat Channel
 //ADC1 needs to be enabled for it
+//Continuous conversion mode set to enabled
 #define FV_HALADC hadc1
 
 

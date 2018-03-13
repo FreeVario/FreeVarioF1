@@ -15,11 +15,13 @@
 
 #define DISPPOWERDATA 0
 #define DISPVARIODATA 1
+#define DISPWEATHERDATA 2
 
 void DISP_Setup();
 void DISP_Update();
 void DISP_SetMode(uint8_t mode);
 static void showVarioData();
+static void showWeatherData();
 static void showPowerData();
 
 #endif /* DISPLAY_H_ */
