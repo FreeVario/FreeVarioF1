@@ -79,6 +79,16 @@ void showVarioData(){
 
 }
 
+void showStartUP() {
+	SSD1306_Fill(0);
+	SSD1306_UpdateScreen();
+
+	SSD1306_GotoXY (10,10);  // goto 10, 10
+
+	SSD1306_Puts ("Starting..", &Font_11x18, 1);  // print Hello
+	SSD1306_UpdateScreen(); // update screen
+}
+
 void showWeatherData(){
 	char vals[12];
 	SSD1306_GotoXY (10,10);  // goto 10, 10

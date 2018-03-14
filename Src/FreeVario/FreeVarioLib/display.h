@@ -21,11 +21,12 @@
 
 void DISP_Setup();
 void DISP_Update();
+void showStartUP();
 void DISP_SetMode(uint8_t mode);
 void DISP_NextMode();
 void DISP_PrevMode();
-static void showVarioData();
-static void showWeatherData();
-static void showPowerData();
+void showVarioData();
+void showWeatherData();
+void showPowerData();
 
 #endif /* DISPLAY_H_ */

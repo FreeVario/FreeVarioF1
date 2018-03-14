@@ -112,20 +112,17 @@ void run1000() {
 
 
 void setup() {
+	DISP_Setup();
+	showStartUP();
 	setupConfig();
 	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
-
-//TODO: add macro defs
+//TODO: add macro defines
 	AUDIO_Setup_Tone();
-
 	BARO_Setup();
 	ACCL_Setup();
 	HUMID_Setup();
-	DISP_Setup();
 	DISP_SetMode(DISPVARIODATA);
-
 	HAL_Delay(100);
-
 	startTime = HAL_GetTick();
 
 
@@ -140,8 +137,6 @@ void loop() {
 				SendDataGPSbuid(transferBuffer[i]);
 		}
 	}
-
-
 
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {

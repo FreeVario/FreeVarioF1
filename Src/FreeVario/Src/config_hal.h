@@ -108,5 +108,16 @@
 //Continuous conversion mode set to enabled
 #define FV_HALADC hadc1
 
+/*
+ * Buttons
+ * Configure all buttons as GPIO_EXTI
+ * to use the interrupt handler.
+ * Use the same port
+ */
+
+#define FV_BTNOPTION GPIO_PIN_3
+#define FV_BTNNEXT	GPIO_PIN_5 //B
+#define FV_BTNPREV  GPIO_PIN_4 //B
+#define FV_BRNPRT 	GPIOB
 
 #endif /* CONFIG_HAL_H_ */
