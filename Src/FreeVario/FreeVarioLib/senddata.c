@@ -35,6 +35,7 @@ extern float humidtemp; //TODO: temp set from whats available
 //Protection against buffer overflow
 void strBTCat(char * stradd) {
 
+
 	if (strlen(BtBuffer) + strlen(stradd) < BTBUFFER ) { //then safe to cat
 		strcat(BtBuffer,stradd);
 	} else { //clear it, data is old
@@ -43,6 +44,28 @@ void strBTCat(char * stradd) {
 	}
 
 }
+
+//temporary method to configure the BT module
+void setupSendData() {
+#ifdef SETUPBT
+	char buff[30];
+	sprintf(buff, "AT+NAMEFreeVario");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
+	sprintf(buff, "AT+NAMBFreeVarioLE");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
+	sprintf(buff, "AT+PIN1207");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
+	sprintf(buff, " AT+PINB120730");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
+	sprintf(buff, "AT+BAUD4");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+#endif
+}
+
 
 //send all data
 void sendSensorData(){
@@ -73,7 +96,7 @@ void sendsData(char* txbuffer) {
 	memset(txbuffer, 0, strlen(txbuffer));
 }
 
-void SendDataGPSbuid(char * c) {                                         // GPSbuffer[] is global
+void SendDataGPSbuid(uint8_t * c) {                                         // GPSbuffer[] is global
 
   static char q;
   static bool flag = false;

@@ -15,8 +15,9 @@
 
 void strBTCat(char * stradd);
 
+void setupSendData();
 void sendSensorData(); //manager
-void SendDataGPSbuid(char * c); //team lead
+void SendDataGPSbuid(uint8_t * c); //team lead
 void sendsData(char* txbuffer); //actually does the work
 
 

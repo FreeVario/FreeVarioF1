@@ -26,7 +26,7 @@ extern float gyro_z;
 
 
 void ACCL_Setup() {
-	 SD_MPU6050_Init(&FV_I2C1,&mpu1,SD_MPU6050_Device_0,SD_MPU6050_Accelerometer_16G,SD_MPU6050_Gyroscope_250s );
+	 SD_MPU6050_Init(&FV_I2C1,&mpu1,FV_ACCL_ADR,SD_MPU6050_Accelerometer_16G,SD_MPU6050_Gyroscope_250s );
 }
 
 

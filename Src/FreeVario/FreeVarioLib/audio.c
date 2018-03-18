@@ -40,9 +40,11 @@ const uint16_t sine_wave_array[32] = {2047, 1648, 1264, 910, 600,  345,
 extern TIM_HandleTypeDef FV_TONETMR;
 
 
-
+#ifdef BUZZERDAC
 extern DAC_HandleTypeDef FV_DAC;
 extern TIM_HandleTypeDef FV_DACTMR;
+#endif
+
 
 void AUDIO_Setup_Tone() {
 	 HAL_TIM_PWM_Start(&FV_TONETMR, FV_TONECHN);

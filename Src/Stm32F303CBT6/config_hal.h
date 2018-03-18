@@ -21,8 +21,8 @@
 #include "stm32f3xx_hal.h"
 
 //Board LED
-#define FV_LED LD9_Pin
-#define FV_LED_GPIO	GPIOE
+#define FV_LED GPIO_PIN_13
+#define FV_LED_GPIO	GPIOC
 
 // Master I2C channel
 /* Use this for the Baro and ACCL sensor
@@ -31,21 +31,19 @@
  * Setting digital filter to 2 (or higher) will help a lot
  */
 #define FV_I2C1 hi2c1
-#define FV_I2C1_SCL_Pin I2C1_SCL_Pin
-#define FV_I2C1_SDA_Pin I2C1_SDA_Pin
+#define FV_I2C1_SCL_Pin GPIO_PIN_6
+#define FV_I2C1_SDA_Pin GPIO_PIN_7
 #define FV_I2CI_PORT GPIOB
 
+
+//ACCL address
+#define FV_ACCL_ADR SD_MPU6050_Device_1
 
 //Secondary I2C channel
 /*
  * Todo: also implement Busy flag
  */
 #define FV_I2C2 hi2c2
-
-
-//ACCL address
-#define FV_ACCL_ADR SD_MPU6050_Device_0
-
 
 
 //GPS

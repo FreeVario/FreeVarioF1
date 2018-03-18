@@ -112,6 +112,9 @@ void run1000() {
 
 
 void setup() {
+
+
+	setupSendData();
 	DISP_Setup();
 	showStartUP();
 	setupConfig();

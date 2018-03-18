@@ -20,6 +20,8 @@
 #include "globals.h"
 
 
+#define SETUPBT
+
 
 #define VARIO
 #define VARIO2
