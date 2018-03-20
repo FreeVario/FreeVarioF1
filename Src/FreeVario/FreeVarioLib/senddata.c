@@ -47,22 +47,33 @@ void strBTCat(char * stradd) {
 
 //temporary method to configure the BT module
 void setupSendData() {
-#ifdef SETUPBT
+#ifdef FV_UARTBT
+#ifdef SETUPBT //This works sort off.
 	char buff[30];
+	sprintf(buff, "AT");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
 	sprintf(buff, "AT+NAMEFreeVario");
 	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
 	HAL_Delay(500);
 	sprintf(buff, "AT+NAMBFreeVarioLE");
 	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
 	HAL_Delay(500);
+	sprintf(buff, "AT+DUAL0");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
+	sprintf(buff, "AT+ROLB0");
+	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+	HAL_Delay(500);
 	sprintf(buff, "AT+PIN1207");
 	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
 	HAL_Delay(500);
-	sprintf(buff, " AT+PINB120730");
+	sprintf(buff, "AT+PINB120730");
 	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
 	HAL_Delay(500);
 	sprintf(buff, "AT+BAUD4");
 	HAL_UART_Transmit(&FV_UARTBT, buff, strlen(buff), 0xff);
+#endif
 #endif
 }
 
@@ -91,8 +102,9 @@ void sendSensorData(){
 
 void sendsData(char* txbuffer) {
 	CDC_Transmit_FS(txbuffer, (uint16_t)strlen(txbuffer));
-
+#ifdef FV_UARTBT
 	HAL_UART_Transmit(&FV_UARTBT,(uint8_t *)txbuffer, strlen(txbuffer),0xff);
+#endif
 	memset(txbuffer, 0, strlen(txbuffer));
 }
 

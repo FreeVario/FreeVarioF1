@@ -13,14 +13,14 @@
 #define CONFIG_H_
 #include "../Src/config_hal.h"
 
-#include <math.h>
+#include "math.h"
 #include "stdbool.h"
 #include "settings.h"
 #include "stackops.h"
 #include "globals.h"
 
 
-#define SETUPBT
+//#define SETUPBT
 
 
 #define VARIO

@@ -19,7 +19,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
 #define GPSDMABUFFER 128
 
 uint8_t  receiveBuffer[GPSDMABUFFER*2];
@@ -95,7 +94,9 @@ void run100() {
 //slow loop
 void run1000() {
 	if (startwaitcomplete && dataValid) {
+#ifdef FV_OLEDI2C
 		DISP_Update();
+#endif
 	}
 #if defined(HUMID)
 	HUMID_Read();
@@ -115,7 +116,10 @@ void setup() {
 
 
 	setupSendData();
+#ifdef FV_OLEDI2C
 	DISP_Setup();
+	DISP_SetMode(DISPVARIODATA);
+#endif
 	showStartUP();
 	setupConfig();
 	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
@@ -124,7 +128,6 @@ void setup() {
 	BARO_Setup();
 	ACCL_Setup();
 	HUMID_Setup();
-	DISP_SetMode(DISPVARIODATA);
 	HAL_Delay(100);
 	startTime = HAL_GetTick();
 
@@ -151,7 +154,7 @@ void loop() {
 		run10();
 
 	}
-
+//Do not change this value, it is used to calculate m/s
 	if (HAL_GetTick() >= (sc_timer100 + 100)) {
 		sc_timer100 = HAL_GetTick();
 		run100();

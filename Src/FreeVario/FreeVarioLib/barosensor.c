@@ -94,7 +94,7 @@ void calcVario() {
 
     count=0;//Debug counter.
     if (SO_qisFull(&AltitudeMtr)) {
-        currentVarioMPS =  SO_front(&AltitudeMtr) -  SO_rear(&AltitudeMtr);
+        currentVarioMPS =  SO_rear(&AltitudeMtr) -  SO_front(&AltitudeMtr);
         cuttentVarioAvMPS = SO_getAvarage(&VarioMPS);
     }else{
         currentVarioMPS = 0;
