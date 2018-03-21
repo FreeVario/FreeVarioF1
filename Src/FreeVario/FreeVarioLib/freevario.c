@@ -27,6 +27,7 @@ uint8_t  transferBuffer[GPSDMABUFFER];
 uint32_t sc_timer=0;
 uint32_t sc_timer100=0;
 uint32_t sc_timer1000=0;
+uint32_t sc_timer200=0;
 uint8_t startwaitcomplete=0;
 uint32_t startTime=0;
 volatile uint8_t gpsdata=0;
@@ -80,12 +81,19 @@ void run10() {
 	}
 }
 
-//sendata loop
+
 void run100() {
 
 	calcVario();
 	if (startwaitcomplete && dataValid) {
 		checkAdaptiveVario(currentVarioMPS);
+
+	}
+
+}
+//sendata loop
+void run200() {
+	if (startwaitcomplete && dataValid) {
 		sendSensorData();
 	}
 
@@ -158,6 +166,13 @@ void loop() {
 	if (HAL_GetTick() >= (sc_timer100 + 100)) {
 		sc_timer100 = HAL_GetTick();
 		run100();
+
+	}
+
+
+	if (HAL_GetTick() >= (sc_timer200 + 200)) {
+		sc_timer200 = HAL_GetTick();
+		run200();
 
 	}
 

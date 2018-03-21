@@ -123,10 +123,8 @@ void SendDataGPSbuid(uint8_t * c) {                                         // G
   if ( y < GPSBUFFER) sendBuffer[y++] = q;
 
   if (q == 0x0d) {
-    flag = true;                                                // is the character a CR for eol
-    sendBuffer[y++] = '\r';
-    sendBuffer[y++] = '\n';
-    sendBuffer[y++] = '\0';
+    flag = true;                                               // is the character a CR for eol
+    sendBuffer[y++] = '\n';   								//only new-line is supported by XCsoar
     y = 0;
   }
 
