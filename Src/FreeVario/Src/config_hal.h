@@ -24,6 +24,9 @@
 #define FV_LED LD9_Pin
 #define FV_LED_GPIO	GPIOE
 
+//Audio baseline for buzzer
+#define FV_TONEBASE 600
+
 // Master I2C channel
 /* Use this for the Baro and ACCL sensor
  * Configure: Fast mode 400

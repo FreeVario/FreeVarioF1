@@ -61,7 +61,7 @@ uint16_t calcCRC16(const uint8_t* src, int len)
     return crc;
 }
 
-bool AM2322_poll(I2C_HandleTypeDef *hi2c)
+bool AM2322_poll(I2C_HandleTypeDef *FV_AMI2C)
 {
     bool    success = false;
     uint8_t data[8];
@@ -73,17 +73,17 @@ bool AM2322_poll(I2C_HandleTypeDef *hi2c)
           };
 
     // wakeup
-    HAL_I2C_Master_Transmit(hi2c,AM2321_I2C_ADDR,NULL, 0,100);
+    HAL_I2C_Master_Transmit(FV_AMI2C,AM2321_I2C_ADDR,NULL, 0,100);
 
 
     // read data
 
 
-    HAL_I2C_Master_Transmit(hi2c,AM2321_I2C_ADDR,(uint8_t *)READ_REGISTER_CMD, 3,100);
+    HAL_I2C_Master_Transmit(FV_AMI2C,AM2321_I2C_ADDR,(uint8_t *)READ_REGISTER_CMD, 3,100);
     HAL_Delay(2);
 
 
-    if(HAL_I2C_Master_Receive(hi2c,AM2321_I2C_ADDR,(uint8_t *)data,8,100) == 0)
+    if(HAL_I2C_Master_Receive(FV_AMI2C,AM2321_I2C_ADDR,(uint8_t *)data,8,100) == 0)
     {
         uint8_t  cmd     = data[0];
         uint8_t  dataLen = data[1];

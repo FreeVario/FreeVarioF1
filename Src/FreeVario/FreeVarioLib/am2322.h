@@ -29,7 +29,7 @@ typedef struct tagRESULT
 /** Read current temperature and humidity from AM2321
  * @return  result (true=success)
  */
-bool AM2322_poll(I2C_HandleTypeDef *hi2c);
+bool AM2322_poll(I2C_HandleTypeDef *FV_AMI2C);
 
 /** Get last read temperature value
  * @return  temperature value (degress)

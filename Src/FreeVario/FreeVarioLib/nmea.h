@@ -15,7 +15,7 @@
 void NMEA_setPTAS1(double vario, double varioAv, double altitude);
 void NMEA_setnmeaShortLXWP0(float varioAlt, float varioMts);
 void NMEA_setNmeaLK8EX1(int rawPressure, int varioAlt, float climbRate, int temperature, int pbat);
-void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, int temperature, int humidity, float batVolt);
+void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, float temperature, float humidity, float batVolt);
 void getCRC(char *buff);
 char *dtostrf (float val, signed char width, unsigned char prec, char *sout);
 

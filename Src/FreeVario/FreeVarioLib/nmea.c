@@ -114,7 +114,7 @@ void NMEA_setNmeaLK8EX1(int rawPressure, int varioAlt, float climbRate, int temp
 //Using the C-probe sentence
 //temp and
 
-void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, int temperature, int humidity, float batVolt) {
+void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, float temperature, float humidity, float batVolt) {
 
   // $PCPROBE,T,Q0,Q1,Q2,Q3,ax,ay,az,temp,rh,batt,delta_press,abs_press,C,
   // - "T" after "$PCPROBE" indicates that the string contains data. Data are represented as signed,
@@ -130,12 +130,7 @@ void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, int temperature, int h
   //    process is likely to affect the readings of the temperature and humidity sensors.
 
 
-
-  int cTemp = temperature;
-  int cRh = humidity;
-  int cBat = batVolt * 1000;
-
-  sprintf(nmeaPcProbe,"$PCPROBE,T,,,,,%02x,%02x,%02x,%02x,%02x,%02x,,,*",(int)aax,(int)aay,(int)aaz,cTemp,cRh,cBat);
+  sprintf(nmeaPcProbe,"$PCPROBE,T,,,,,%02x,%02x,%02x,%02x,%02x,%02x,,,*",(int)aax * 1000,(int)aay * 1000,(int)aaz * 1000, (int)temperature * 10,(int)humidity * 10,(int)batVolt* 1000);
 
   getCRC(nmeaPcProbe);
   strcat(nmeaPcProbe, t_check);

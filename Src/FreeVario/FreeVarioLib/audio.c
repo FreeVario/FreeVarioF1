@@ -85,7 +85,7 @@ void tone(float freq, int period) {
 //changes tone while beeping
 void dynaTone(float freq) {
 	uint16_t fv_tone_t = 1/(float)freq * PWMTMRMULTIPLIER;
-	 FV_TONEHALTMR->ARR  = fv_tone_t;
+	FV_TONEHALTMR->ARR  = fv_tone_t;
 	FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
 #ifdef BUZZERDAC
 	FV_DACHALTMR->ARR = 1/(float)freq * DACTMRMULTIPLIER;
@@ -95,14 +95,13 @@ void dynaTone(float freq) {
 
 int millis() {
 
-  return HAL_GetTick();
+	return HAL_GetTick();
 }
 
 void noTone() {
-
-	 FV_TONEHALTMR->CR1 = 0;
+	FV_TONEHALTMR->CR1 = 0;
 #ifdef BUZZERDAC
-	 FV_DACHALTMR->CR1=0;
+	FV_DACHALTMR->CR1=0;
 #endif
 }
 
@@ -225,7 +224,7 @@ void makeVarioAudio(float vario) {
 
 #endif
 
-    variofr = ((float)(fabs(vario + 1)) * 200 ) + 400;
+    variofr = ((float)(fabs(vario + 1)) * 200 ) + FV_TONEBASE;
 
     variof = (AUDIOSMOOTH * variof + variofr )/(AUDIOSMOOTH + 1);
 
