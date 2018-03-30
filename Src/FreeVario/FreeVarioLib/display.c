@@ -13,14 +13,16 @@
 
 int8_t dispmode=0;
 uint8_t refreshcount=0;
-extern ADC_HandleTypeDef FV_HALADC;
+extern double vbat;
+extern uint8_t ischarging;
+extern uint8_t ischarged;
+
 
 void DISP_Setup(){
 	SSD1306_Init ();  // initialize the display
     SSD1306_Fill (0);  // fill the display with black color
 	SSD1306_UpdateScreen(); // update screen
 
-	HAL_ADC_Start(&FV_HALADC);
 
 }
 
@@ -106,32 +108,22 @@ void showPowerData(){
 
 
 
-	    char vals[33];
-		SSD1306_GotoXY (10,10);  // goto 10, 10
-		if(HAL_GPIO_ReadPin(FV_ISCHARGEDPORT,FV_ISCHARGEDPIN) == 0) {
-			SSD1306_Puts ("Charged", &Font_11x18, 1);
-		} else if (HAL_GPIO_ReadPin(FV_ISCHARGINGPORT,FV_ISCHARGINGPIN) == 0) {
-			SSD1306_Puts ("Charging", &Font_11x18, 1);
-		}else {
-			SSD1306_Puts ("F-knows", &Font_11x18, 1);
-		}
+	char vals[33];
+	SSD1306_GotoXY(10, 10);  // goto 10, 10
+	if (ischarged) {
+		SSD1306_Puts("Charged", &Font_11x18, 1);
+	} else if (ischarging) {
+		SSD1306_Puts("Charging", &Font_11x18, 1);
+	} else {
+		SSD1306_Puts("Error", &Font_11x18, 1);
+	}
 
+	SSD1306_GotoXY(10, 30);
 
-		SSD1306_GotoXY (10, 30);
-		if (HAL_ADC_PollForConversion(&FV_HALADC,100) == HAL_OK) {
+	sprintf(vals, "%2.2f V", vbat);
+	SSD1306_Puts(vals, &Font_11x18, 1);
 
-				uint32_t cnv = HAL_ADC_GetValue(&FV_HALADC);
-				//double vbat = (double)( (cnv * 2 * 3300) / 0xfff)/1000;
-				//TODO: figure out the conversion, chek for power draining due to measurement
-
-				double vbat = (double) cnv /250;
-				sprintf(vals,"%2.2f V",(double)vbat);
-				SSD1306_Puts (vals, &Font_11x18, 1);
-
-		}
-
-
-		SSD1306_UpdateScreen();
+	SSD1306_UpdateScreen();
 
 
 }

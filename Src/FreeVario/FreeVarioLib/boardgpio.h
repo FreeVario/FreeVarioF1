@@ -8,21 +8,16 @@
   any later version. see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FREEVARIO_H_
-#define FREEVARIO_H_
+
+#ifndef BOARDGPIO_H_
+#define BOARDGPIO_H_
 #include "config.h"
 
+void BGPIO_Setup();
+void BGPIO_Read();
+void readBatVoltage();
+void readCharger();
+void setPowerBankFunction(uint8_t state);
+void togglePowerBankFunction();
 
-void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c,uint8_t transferdirection,uint16_t AddrMatchCode);
-void FV_Run();
-void run10();
-void run100();
-void run200();
-void run1000();
-
-
-//private functions
-void setup();
-void loop();
-
-#endif /* FREEVARIO_H_ */
+#endif /* BOARDGPIO_H_ */

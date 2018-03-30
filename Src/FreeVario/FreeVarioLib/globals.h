@@ -41,7 +41,9 @@ float gyro_z;
 float humidity;
 float humidtemp;
 
-
+double vbat;
+uint8_t ischarging;
+uint8_t ischarged;
 
 extern uint8_t takeoff;
 

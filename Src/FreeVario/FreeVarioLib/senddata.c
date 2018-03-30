@@ -14,6 +14,9 @@
 #include "stdio.h"
 #include "string.h"
 
+extern double vbat;
+extern uint8_t ischarging;
+
 #define GPSBUFFER 120
 #define BTBUFFER 1024 //lower will crash when USB connected
 char sendBuffer[GPSBUFFER];
@@ -91,7 +94,7 @@ void sendSensorData(){
 	strBTCat(nmeaPTAS1);
 
 #if defined(ACCL) && defined(HUMID)
-	NMEA_setNmeaPcProbe(accel_x,accel_y,accel_z,humidtemp,humidity,0);
+	NMEA_setNmeaPcProbe(accel_x,accel_y,accel_z,humidtemp,humidity,vbat,ischarging);
 	strBTCat(nmeaPcProbe);
 
 #endif
@@ -113,7 +116,7 @@ void SendDataGPSbuid(uint8_t * c) {                                         // G
   static char q;
   static bool flag = false;
 
-  q = c;
+  q = *c;
 
   if ( q == 0x24 )                                              // '$'
   {

@@ -16,6 +16,7 @@
 #include "senddata.h"
 #include "display.h"
 #include "buttons.h"
+#include "boardgpio.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -102,6 +103,7 @@ void run200() {
 //slow loop
 void run1000() {
 	if (startwaitcomplete && dataValid) {
+		BGPIO_Read(); //must happen before display update
 #ifdef FV_OLEDI2C
 		DISP_Update();
 #endif
@@ -136,6 +138,7 @@ void setup() {
 	BARO_Setup();
 	ACCL_Setup();
 	HUMID_Setup();
+	BGPIO_Setup();
 	HAL_Delay(100);
 	startTime = HAL_GetTick();
 
@@ -147,8 +150,8 @@ void loop() {
 	if(gpsdata) {
 		gpsdata=0;
 
-		for (int i = 0; i < GPSDMABUFFER; ++i) {
-				SendDataGPSbuid(transferBuffer[i]);
+		for (uint8_t i = 0; i < GPSDMABUFFER; ++i) {
+				SendDataGPSbuid( &transferBuffer[i]);
 		}
 	}
 

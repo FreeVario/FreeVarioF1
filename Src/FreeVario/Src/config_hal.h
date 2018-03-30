@@ -129,4 +129,12 @@
 #define FV_BTNPREV  GPIO_PIN_4 //B
 #define FV_BRNPRT 	GPIOB
 
+/*
+ * Enable powerbank port
+ */
+
+#define FV_PWROUTPIN GPIO_PIN_0
+#define FV_PWROUTPORT GPIOB
+
+
 #endif /* CONFIG_HAL_H_ */

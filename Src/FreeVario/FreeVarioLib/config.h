@@ -29,7 +29,7 @@
 
 #define ACCL
 #define ACCLSMOOTH 10 //Lowpass filter level
-//#define HUMID //enable humid sensor
+#define HUMID //enable humid sensor
 
 //#define BUZZERDAC //use the DAC output
 #define STARTDELAY 6000 //the time delay before the process starts

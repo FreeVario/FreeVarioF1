@@ -11,6 +11,7 @@
 
 #include "buttons.h"
 #include "display.h"
+#include "boardgpio.h"
 
 uint32_t optbtndelay=0;
 uint8_t optionbt = 0;
@@ -33,7 +34,7 @@ void BTN_Read() {
 	if (optionbt) {
 		if (HAL_GPIO_ReadPin(FV_BRNPRT, FV_BTNOPTION)) {
 			if (HAL_GetTick() > optbtndelay + BUTTONDELAY) {
-				NVIC_SystemReset();
+				togglePowerBankFunction();
 				optbtndelay = HAL_GetTick();
 			}
 		}
