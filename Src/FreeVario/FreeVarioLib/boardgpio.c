@@ -13,9 +13,14 @@
  */
 
 #include "boardgpio.h"
+
+#define CHARGEINTERVALOFF 300
+#define CHARGEINTERVALON  60
+
 extern double vbat;
 extern uint8_t ischarging;
 extern uint8_t ischarged;
+uint16_t seconds=0;
 
 extern ADC_HandleTypeDef FV_HALADC;
 
@@ -24,11 +29,33 @@ void BGPIO_Setup() {
 
 }
 
+//once a second
 void BGPIO_Read() {
 	readBatVoltage();
 	readCharger();
+#ifdef INTERVALPWB
+	if(ischarging){
+		doIntervalCharge();
+	}
+#endif
 }
 
+
+void doIntervalCharge() {
+	if(seconds < CHARGEINTERVALON){
+		HAL_GPIO_WritePin(FV_PWROUTPORT,FV_PWROUTPIN,GPIO_PIN_SET);
+	} else {
+		HAL_GPIO_WritePin(FV_PWROUTPORT,FV_PWROUTPIN,GPIO_PIN_RESET);
+	}
+
+	seconds++;
+
+	if (seconds >= CHARGEINTERVALOFF){
+		seconds=0;
+	}
+
+
+}
 
 void readBatVoltage() {
 
@@ -46,17 +73,18 @@ void readBatVoltage() {
 
 void readCharger(){
 
-	if(HAL_GPIO_ReadPin(FV_ISCHARGEDPORT,FV_ISCHARGEDPIN) == 0) {
-		ischarged = 1;
-	} else {
+	if(HAL_GPIO_ReadPin(FV_ISCHARGEDPORT,FV_ISCHARGEDPIN) == GPIO_PIN_SET) {
 		ischarged = 0;
-	}
+		 if (HAL_GPIO_ReadPin(FV_ISCHARGINGPORT,FV_ISCHARGINGPIN) == GPIO_PIN_RESET) {
+			 ischarging = 1;
+		 }
 
-	 if (HAL_GPIO_ReadPin(FV_ISCHARGINGPORT,FV_ISCHARGINGPIN) == 0) {
-		 ischarging = 1;
-	}else {
+	} else {
+		ischarged = 1;
 		ischarging = 0;
 	}
+
+
 
 }
 

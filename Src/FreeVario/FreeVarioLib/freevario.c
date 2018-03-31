@@ -103,7 +103,7 @@ void run200() {
 //slow loop
 void run1000() {
 	if (startwaitcomplete && dataValid) {
-		BGPIO_Read(); //must happen before display update
+		BGPIO_Read(); //must happen before display update and per second
 #ifdef FV_OLEDI2C
 		DISP_Update();
 #endif

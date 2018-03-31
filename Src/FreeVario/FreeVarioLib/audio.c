@@ -16,7 +16,7 @@ float vario_s=0;
 float t_vario=-5;
 
 
-bool climbing = false;
+//bool climbing = false;
 int tm;
 int rm;
 int stime;
@@ -264,13 +264,19 @@ void makeVarioAudio(float vario) {
       dynaTone(variof);
       playToneInterval(variof, pulse, pulse / 2);
     }
-    climbing = true;
-  } else {
-    if (climbing ) { //dropped out of the thermal
-      tone( 100, OUTOFTHERMALBUZZT);
-      climbing = false;
-    }
+   // climbing = true;
   }
+
+  /*
+   * Removed by me
+   */
+
+  //else {
+  //  if (climbing ) { //dropped out of the thermal
+  //    tone( 100, OUTOFTHERMALBUZZT);
+  //    climbing = false;
+  //  }
+  //}
 
 }
 

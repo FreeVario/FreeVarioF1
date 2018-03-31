@@ -106,11 +106,11 @@
  *
  */
 
-#define FV_ISCHARGEDPIN GPIO_PIN_15
-#define FV_ISCHARGEDPORT GPIOA
+#define FV_ISCHARGEDPIN GPIO_PIN_8
+#define FV_ISCHARGEDPORT GPIOB
 
-#define FV_ISCHARGINGPIN GPIO_PIN_8
-#define FV_ISCHARGINGPORT GPIOB
+#define FV_ISCHARGINGPIN GPIO_PIN_15
+#define FV_ISCHARGINGPORT GPIOA
 
 //ADC for reading internal vBat Channel
 //ADC1 needs to be enabled for it

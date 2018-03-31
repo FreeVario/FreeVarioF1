@@ -15,6 +15,7 @@
 
 void BGPIO_Setup();
 void BGPIO_Read();
+void doIntervalCharge();
 void readBatVoltage();
 void readCharger();
 void setPowerBankFunction(uint8_t state);

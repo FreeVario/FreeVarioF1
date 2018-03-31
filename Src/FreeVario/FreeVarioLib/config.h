@@ -22,6 +22,7 @@
 
 //#define SETUPBT
 
+#define INTERVALPWB  //enable the powerbank in inerval mode
 
 #define VARIO
 #define VARIO2
@@ -38,7 +39,7 @@
 #define BUZZSINKALERT -2 //Alert if sinking harder than normal (not sink alarm)
 #define BUZZSINKALERTPAUSE 8000 //pause length in between alerts
 #define BUZZERVARIOSTOP 10000 //time vario STOP making noise when climbrate 0 m/s
-#define OUTOFTHERMALBUZZT 3000 //time buzzer goes buuhhhhh
+//#define OUTOFTHERMALBUZZT 3000 //time buzzer goes buuhhhhh
 #define SOARDETECTION 30000 // if climbrate is constant for set milliseconds at 0 m/s the buzzer is muted
 #define BUZZERCLIMBING 0.2 // vario level to start giving climbing signal
 #define AUDIOSMOOTH 10 //smooth out audio changes
