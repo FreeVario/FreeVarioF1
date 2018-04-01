@@ -42,6 +42,7 @@ float humidity;
 float humidtemp;
 
 double vbat;
+uint8_t pbat;
 uint8_t ischarging;
 uint8_t ischarged;
 

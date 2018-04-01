@@ -114,7 +114,7 @@ void NMEA_setNmeaLK8EX1(int rawPressure, int varioAlt, float climbRate, int temp
 //Using the C-probe sentence
 //temp and
 
-void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, float temperature, float humidity, float batVolt, uint8_t charging) {
+void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, float temperature, float humidity, uint8_t batPers, uint8_t charging) {
 
   // $PCPROBE,T,Q0,Q1,Q2,Q3,ax,ay,az,temp,rh,batt,delta_press,abs_press,C,
   // - "T" after "$PCPROBE" indicates that the string contains data. Data are represented as signed,
@@ -138,7 +138,7 @@ void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, float temperature, flo
 	  }
 
 
-  sprintf(nmeaPcProbe,"$PCPROBE,T,,,,,%02x,%02x,%02x,%02x,%02x,%02x,,,%1X*",(int)aax * 100,(int)aay * 100,(int)aaz * 100, (int)temperature * 10,(int)humidity * 10,(int)batVolt* 1000,ch);
+  sprintf(nmeaPcProbe,"$PCPROBE,T,,,,,%02x,%02x,%02x,%02x,%02x,%02x,,,%1X*",(int)aax * 100,(int)aay * 100,(int)aaz * 100, (int)temperature * 10,(int)humidity * 10,(int)batPers* 1000,ch);
 
   getCRC(nmeaPcProbe);
   strcat(nmeaPcProbe, t_check);

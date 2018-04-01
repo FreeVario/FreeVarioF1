@@ -120,7 +120,7 @@ void showPowerData(){
 
 	SSD1306_GotoXY(10, 30);
 
-	sprintf(vals, "%2.2f V", vbat);
+	sprintf(vals, "%2.2fV %d%%", vbat,pbat);
 	SSD1306_Puts(vals, &Font_11x18, 1);
 
 	SSD1306_UpdateScreen();

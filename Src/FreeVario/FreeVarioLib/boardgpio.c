@@ -18,6 +18,7 @@
 #define CHARGEINTERVALON  60
 
 extern double vbat;
+extern uint8_t pbat;
 extern uint8_t ischarging;
 extern uint8_t ischarged;
 uint16_t seconds=0;
@@ -63,8 +64,10 @@ void readBatVoltage() {
 
 			uint32_t cnv = HAL_ADC_GetValue(&FV_HALADC);
 			//double vbat = (double)( (cnv * 2 * 3300) / 0xfff)/1000;
-			//TODO: figure out the conversion, chek for power draining due to measurement
+			//TODO: figure out the conversion, check for power draining due to measurement
 		  vbat = (double) cnv /250;
+		  //calculate %charge
+		  pbat = (uint8_t)(vbat - 3.6) * 16.6;
 
 	}
 

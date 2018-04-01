@@ -94,7 +94,7 @@ void sendSensorData(){
 	strBTCat(nmeaPTAS1);
 
 #if defined(ACCL) && defined(HUMID)
-	NMEA_setNmeaPcProbe(accel_x,accel_y,accel_z,humidtemp,humidity,vbat,ischarging);
+	NMEA_setNmeaPcProbe(accel_x,accel_y,accel_z,humidtemp,humidity,pbat,ischarging);
 	strBTCat(nmeaPcProbe);
 
 #endif
