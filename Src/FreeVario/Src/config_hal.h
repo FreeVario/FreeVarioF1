@@ -56,7 +56,7 @@
  * Speed: set for correct speed GPS
  * DMA: Enable DMA Channel with circular buffer
  * and set Global interrupt
- * Testing: Disabled overrun and dma error.
+ * Set polarity low and idle state to set
  */
 #define FV_UARTGPS huart2
 

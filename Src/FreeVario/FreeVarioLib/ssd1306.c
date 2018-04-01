@@ -50,15 +50,13 @@ uint8_t SSD1306_Init(void) {
 	ssd1306_I2C_Init();
 	
 	/* Check if LCD connected to I2C */
-	if (HAL_I2C_IsDeviceReady(&FV_OLEDI2C, SSD1306_I2C_ADDR, 1, 20000) != HAL_OK) {
+	if (HAL_I2C_IsDeviceReady(&FV_OLEDI2C, SSD1306_I2C_ADDR, 1, 1000) != HAL_OK) {
 		/* Return false */
 		return 0;
 	}
 	
 	/* A little delay */
-	uint32_t p = 2500;
-	while(p>0)
-		p--;
+	HAL_Delay(10);
 	
 	/* Init LCD */
 	SSD1306_WRITECOMMAND(0xAE); //display off
@@ -502,9 +500,7 @@ void SSD1306_OFF(void) {
 
 void ssd1306_I2C_Init() {
 	//MX_I2C1_Init();
-	uint32_t p = 250000;
-	while(p>0)
-		p--;
+	HAL_Delay(10);
 	//HAL_I2C_DeInit(&FV_OLEDI2C);
 	//p = 250000;
 	//while(p>0)

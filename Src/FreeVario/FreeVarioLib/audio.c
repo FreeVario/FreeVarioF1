@@ -267,9 +267,7 @@ void makeVarioAudio(float vario) {
    // climbing = true;
   }
 
-  /*
-   * Removed by me
-   */
+
 
   //else {
   //  if (climbing ) { //dropped out of the thermal

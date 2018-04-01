@@ -123,8 +123,6 @@ void run1000() {
 
 
 void setup() {
-
-
 	setupSendData();
 #ifdef FV_OLEDI2C
 	DISP_Setup();
@@ -132,7 +130,7 @@ void setup() {
 #endif
 	showStartUP();
 	setupConfig();
-	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
+
 //TODO: add macro defines
 	AUDIO_Setup_Tone();
 	BARO_Setup();
@@ -141,6 +139,7 @@ void setup() {
 	BGPIO_Setup();
 	HAL_Delay(100);
 	startTime = HAL_GetTick();
+	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
 
 
 }
@@ -185,6 +184,7 @@ void loop() {
 
 	}
 
+
 #if defined(TAKEOFFVARIO) && !defined(TESTBUZZER)
 	if ((HAL_GetTick() - startTime) > (STARTDELAY + 4000) && !takeoff) {
 		if (fabs(currentVarioMPS) > (float) TAKEOFFVARIO) {
@@ -198,7 +198,7 @@ void loop() {
 #ifdef FV_IWDG
 		HAL_IWDG_Refresh ( &FV_IWDG ) ;
 #endif
-	HAL_Delay(1);
+
 
 }
 
