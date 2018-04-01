@@ -24,6 +24,10 @@
 #define FV_LED GPIO_PIN_13
 #define FV_LED_GPIO	GPIOC
 
+//Audio baseline for buzzer
+#define FV_TONEBASE 800
+
+
 // Master I2C channel
 /* Use this for the Baro and ACCL sensor
  * Configure: Fast mode 400
@@ -34,7 +38,6 @@
 #define FV_I2C1_SCL_Pin GPIO_PIN_6
 #define FV_I2C1_SDA_Pin GPIO_PIN_7
 #define FV_I2CI_PORT GPIOB
-
 
 //ACCL address
 #define FV_ACCL_ADR SD_MPU6050_Device_1
@@ -74,6 +77,7 @@
 #define FV_TONEHALTMR TIM1
 
 //HW DAC output for the speaker
+//
 #define FV_DACTMR htim6
 #define FV_DACHALTMR TIM6
 #define FV_DAC hdac
@@ -87,8 +91,9 @@
 //New AM232x I2C based humidity sensors I2C port
 //This will use the serial 1 connection on the FreeVario board.
 //Serial won't be available for serial data
-#define FV_AMI2C FV_I2C2
-#define FV_OLEDI2C FV_I2C2
+#define FV_OLEDI2C hi2c2
+#define FV_AMI2C hi2c2
+
 
 //Watchdog timer
 /*
@@ -101,11 +106,11 @@
  *
  */
 
-#define FV_ISCHARGEDPIN GPIO_PIN_15
-#define FV_ISCHARGEDPORT GPIOA
+#define FV_ISCHARGEDPIN GPIO_PIN_8
+#define FV_ISCHARGEDPORT GPIOB
 
-#define FV_ISCHARGINGPIN GPIO_PIN_8
-#define FV_ISCHARGINGPORT GPIOB
+#define FV_ISCHARGINGPIN GPIO_PIN_15
+#define FV_ISCHARGINGPORT GPIOA
 
 //ADC for reading internal vBat Channel
 //ADC1 needs to be enabled for it
@@ -123,5 +128,14 @@
 #define FV_BTNNEXT	GPIO_PIN_5 //B
 #define FV_BTNPREV  GPIO_PIN_4 //B
 #define FV_BRNPRT 	GPIOB
+
+
+/*
+ * Enable powerbank port
+ */
+
+#define FV_PWROUTPIN GPIO_PIN_0
+#define FV_PWROUTPORT GPIOB
+
 
 #endif /* CONFIG_HAL_H_ */
