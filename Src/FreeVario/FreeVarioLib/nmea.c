@@ -138,7 +138,7 @@ void NMEA_setNmeaPcProbe(float aax, float aay, float aaz, float temperature, flo
 	  }
 
 
-  sprintf(nmeaPcProbe,"$PCPROBE,T,,,,,%02x,%02x,%02x,%02x,%02x,%02x,,,%1X*",(int)aax * 100,(int)aay * 100,(int)aaz * 100, (int)temperature * 10,(int)humidity * 10,(int)batPers* 1000,ch);
+  sprintf(nmeaPcProbe,"$PCPROBE,T,,,,,%02x,%02x,%02x,%02x,%02x,%02x,,,%1X*",(int)aax * 100,(int)aay * 100,(int)aaz * 100, (int)temperature * 10,(int)humidity * 10,(int)batPers,ch);
 
   getCRC(nmeaPcProbe);
   strcat(nmeaPcProbe, t_check);

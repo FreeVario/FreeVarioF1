@@ -67,7 +67,7 @@ void readBatVoltage() {
 			//TODO: figure out the conversion, check for power draining due to measurement
 		  vbat = (double) cnv /250;
 		  //calculate %charge
-		  pbat = (uint8_t)(vbat - 3.6) * 16.6;
+		  pbat = (uint8_t)((vbat - 3.6) * 16.6);
 
 	}
 

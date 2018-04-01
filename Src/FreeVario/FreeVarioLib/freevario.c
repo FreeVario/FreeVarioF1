@@ -123,6 +123,7 @@ void run1000() {
 
 
 void setup() {
+	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
 	setupSendData();
 #ifdef FV_OLEDI2C
 	DISP_Setup();
@@ -139,7 +140,7 @@ void setup() {
 	BGPIO_Setup();
 	HAL_Delay(100);
 	startTime = HAL_GetTick();
-	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
+
 
 
 }
