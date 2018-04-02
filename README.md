@@ -29,11 +29,11 @@ NMEA Output PCProbe, PTAS1 and LXNAV<br>
 
 Multiple options available. You can mount a HM-13 bluetooth module to stream BLE or standard bluetooth. Internal serial port can either be used for a i2c OLED display or as an internal serial port for built-in solutions like a Kobo reader.
 
-####Solar charger
+#### Solar charger
 
 The on board lipo charger can handle multiple power sources including a solar panel to extend the battery life.
 
-####Powerbank
+#### Powerbank
 
 A on board powerbank can supply up to 200mA 5V via the USB cable to any connected device. When the device is connected to a charger, it will activate a pass through circuit so that the connected device is also charged. This way, disconnecting the usb cable won’t be necessary.
 Another option is interval power supply. This will deliver 1 minute out of 5 minutes to the connected device. Most devices won’t support this however.
