@@ -26,12 +26,17 @@ void DISP_Setup(){
 
 }
 
+void DISP_Refresh() {
+	SSD1306_Fill(0);  //not needed if only characters replaced
+	SSD1306_UpdateScreen();
+	refreshcount = 0;
+
+}
+
 void DISP_Update(){
 	refreshcount++;
 	if (refreshcount > 10) {
-		SSD1306_Fill(0);  //not needed if only characters replaced
-		SSD1306_UpdateScreen();
-		refreshcount=0;
+		DISP_Refresh();
 	}
 
 	switch(dispmode) {
@@ -58,6 +63,7 @@ void DISP_NextMode(){
 		dispmode=0;
 	}
 	DISP_Update();
+	DISP_Refresh();
 }
 
 void DISP_PrevMode(){
@@ -66,6 +72,7 @@ void DISP_PrevMode(){
 		dispmode = DISPITEMS;
 	}
 	DISP_Update();
+	DISP_Refresh();
 }
 
 void showVarioData(){
@@ -115,7 +122,7 @@ void showPowerData(){
 	} else if (ischarging) {
 		SSD1306_Puts("Charging", &Font_11x18, 1);
 	} else {
-		SSD1306_Puts("Error", &Font_11x18, 1);
+		SSD1306_Puts("Ready", &Font_11x18, 1);
 	}
 
 	SSD1306_GotoXY(10, 30);

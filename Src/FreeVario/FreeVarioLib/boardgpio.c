@@ -65,9 +65,9 @@ void readBatVoltage() {
 			uint32_t cnv = HAL_ADC_GetValue(&FV_HALADC);
 			//double vbat = (double)( (cnv * 2 * 3300) / 0xfff)/1000;
 			//TODO: figure out the conversion, check for power draining due to measurement
-		  vbat = (double) cnv /250;
+		  vbat = (double) cnv /236; //just an estimated value.
 		  //calculate %charge
-		  pbat = (uint8_t)((vbat - 3.6) * 16.6);
+		  pbat = (uint8_t)((vbat - 3.6) * 166.6);
 
 	}
 

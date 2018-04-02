@@ -20,6 +20,7 @@
 #define DISPITEMS 3  //total number of items
 
 void DISP_Setup();
+void DISP_Refresh();
 void DISP_Update();
 void showStartUP();
 void DISP_SetMode(uint8_t mode);
