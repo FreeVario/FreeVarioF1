@@ -9,7 +9,6 @@ The current status of the project is beta, it is 100% usable, just some rough ed
   <img src="Doc/IMG_20180330_142712066.jpg" width="350"/>
   <img src="Doc/IMG_20180402_114312719.jpg" width="350"/>
   <img src="Doc/IMG_20180402_114404188.jpg" width="350"/>
-  <img src="Doc/IMG_20180330_141803771.jpg" width="350"/>
 </p>
 
 ### Features:
