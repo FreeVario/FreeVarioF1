@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -21838,6 +21838,9 @@ also wired to BOOT0.</text>
 <pinref part="AC1" gate="G$1" pin="VLOGIC"/>
 <wire x1="256.54" y1="13.97" x2="259.08" y2="13.97" width="0.1524" layer="91"/>
 <label x="256.54" y="11.43" size="1.778" layer="95"/>
+<pinref part="AC1" gate="G$1" pin="AD0"/>
+<wire x1="256.54" y1="16.51" x2="256.54" y2="13.97" width="0.1524" layer="91"/>
+<junction x="256.54" y="13.97"/>
 </segment>
 <segment>
 <pinref part="HM13" gate="G$1" pin="VCC"/>
