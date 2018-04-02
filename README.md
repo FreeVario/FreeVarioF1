@@ -4,7 +4,7 @@ Freevario is an opensource device to provides telemetry data to any vario based 
 The current status of the project is beta, it is 100% usable, just some rough edges here and there. Since the paragliding season is active, only bug fixes will be added. 
 
   <p > 
-  <img src="Doc/IMG_20180330_142039618.jpg" width="350"/> <img src="Doc/IMG_20180330_142712066.jpg" width="350"/>  
+  <img src="Doc/IMG_20180330_142039618.jpg" width="350" class="inline"/> <img src="Doc/IMG_20180330_142712066.jpg" width="350" class="inline"/>  
   </p>
   <p > 
   <img src="Doc/IMG_20180402_114312719.jpg" width="350"/>  <img src="Doc/IMG_20180402_114404188.jpg" width="350"/> 
