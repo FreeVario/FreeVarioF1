@@ -40,4 +40,4 @@ The on board lipo charger can handle multiple power sources including a solar pa
 #### Powerbank
 
 A on board powerbank can supply up to 200mA 5V via the USB cable to any connected device. When the device is connected to a charger, it will activate a pass through circuit so that the connected device is also charged. This way, disconnecting the usb cable won’t be necessary.
-Another option is interval power supply. This will deliver 1 minute out of 5 minutes to the connected device. Most devices won’t support this however.
+Another option is interval power supply. This will deliver 1 minute out of 5 minutes to the connected device. Most devices won’t support this however. You will need a custom kernel for some Android devices. But is does work with Kobo devices and XCSoar (Top Hat) or LK8000.
