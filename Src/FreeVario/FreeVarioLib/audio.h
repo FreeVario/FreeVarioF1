@@ -15,7 +15,9 @@
 
 void makeVarioAudio(float vario);
 void AUDIO_Setup_Tone();
+void StartupTone();
 void tone(float freq, int period);
+void resetTone();
 void noTone();
 int millis();
 void playTonePause(int freq, int nbeeps, int tpause);

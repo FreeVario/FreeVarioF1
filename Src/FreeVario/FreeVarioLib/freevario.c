@@ -34,6 +34,7 @@ uint32_t startTime=0;
 volatile uint8_t gpsdata=0;
 uint8_t sensorToken = 0;
 uint8_t dataValid=1;
+uint8_t hasrunonce=0;
 
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
@@ -119,7 +120,14 @@ void run1000() {
 
 }
 
+/*
+ * Onetime run after startwait completed
+ */
 
+void runOnce(){
+	resetTone();
+
+}
 
 
 void setup() {
@@ -135,6 +143,9 @@ void setup() {
 
 //TODO: add macro defines
 	AUDIO_Setup_Tone();
+	if (!HAL_GPIO_ReadPin(FV_BRNPRT, FV_BTNPREV)) {
+		StartupTone();
+	}
 	BARO_Setup();
 	ACCL_Setup();
 	HUMID_Setup();
@@ -158,6 +169,11 @@ void loop() {
 
 	if ((HAL_GetTick() - startTime) > STARTDELAY) {
 		startwaitcomplete = true;
+		if (!hasrunonce) {
+			runOnce();
+			hasrunonce=1;
+		}
+
 	}
 
 	if (HAL_GetTick() >= (sc_timer + 10)) {

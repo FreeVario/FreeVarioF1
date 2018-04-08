@@ -63,6 +63,8 @@ void AUDIO_Setup_Tone() {
 }
 
 
+
+
 #define BASEPULSE 200
 #define TOPPULSE  1000
 #define PWMTMRMULTIPLIER 10000000
@@ -93,18 +95,43 @@ void dynaTone(float freq) {
 
 }
 
+void StartupTone(){
+	    uint16_t fv_tone_t = 1/(float)800 * PWMTMRMULTIPLIER;
+	    FV_TONEHALTMR->CR1 |= TIM_CR1_CEN;
+	    FV_TONEHALTMR->ARR  = fv_tone_t;
+		FV_TONEHALTMR->FV_TONECCR = fv_tone_t/2;
+
+#ifdef BUZZERDAC
+	FV_DACHALTMR->ARR = 1/(float)800 * DACTMRMULTIPLIER;
+	FV_DACHALTMR->CR1 |= TIM_CR1_CEN;
+#endif
+
+}
+
+
 int millis() {
 
 	return HAL_GetTick();
 }
 
+void resetTone() {
+
+	FV_TONEHALTMR->ARR  = 1;
+	FV_TONEHALTMR->FV_TONECCR = 1;
+	HAL_Delay(1);
+	FV_TONEHALTMR->CR1 &= ~TIM_CR1_CEN;
+}
+
+
 void noTone() {
-	FV_TONEHALTMR->CR1 = 0;
+
+	FV_TONEHALTMR->CR1 &= ~TIM_CR1_CEN;
+	FV_TONEHALTMR->CNT = 0;
+
 #ifdef BUZZERDAC
 	FV_DACHALTMR->CR1=0;
 #endif
 }
-
 
 
 void noToneTimer() {

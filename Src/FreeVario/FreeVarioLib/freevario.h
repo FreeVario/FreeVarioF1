@@ -19,7 +19,7 @@ void run10();
 void run100();
 void run200();
 void run1000();
-
+void runOnce();
 
 //private functions
 void setup();
