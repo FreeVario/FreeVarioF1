@@ -16,7 +16,7 @@
 
 #ifndef AM2322_H_
 #define AM2322_H_
-#include "config.h"
+#include "../Src/config.h"
 
 typedef struct tagRESULT
 {

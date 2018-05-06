@@ -45,7 +45,7 @@ SCL        |PB6          |Serial clock line
 SDA        |PB7          |Serial data line
  */
 
-#include "config.h"
+#include "../Src/config.h"
 //#include "i2c.h"
 #include "fonts.h"
 

@@ -11,8 +11,8 @@
 #ifndef MS5611_H_
 #define MS5611_H_
 
-#include "config.h"
 #include "i2chelper.h"
+#include "../Src/config.h"
 
 #define N_PROM_PARAMS 6
 #define MS5611_ADD1 0xEE

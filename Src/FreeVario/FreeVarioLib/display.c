@@ -117,13 +117,18 @@ void showPowerData(){
 
 	char vals[33];
 	SSD1306_GotoXY(10, 10);  // goto 10, 10
-	if (ischarged) {
-		SSD1306_Puts("Charged", &Font_11x18, 1);
-	} else if (ischarging) {
-		SSD1306_Puts("Charging", &Font_11x18, 1);
+	if (HAL_GPIO_ReadPin(FV_PWROUTPORT, FV_PWROUTPIN) == GPIO_PIN_SET) {
+		SSD1306_Puts("Power Bank", &Font_11x18, 1);
 	} else {
-		SSD1306_Puts("Ready", &Font_11x18, 1);
+		if (ischarged) {
+			SSD1306_Puts("Charged", &Font_11x18, 1);
+		} else if (ischarging) {
+			SSD1306_Puts("Charging", &Font_11x18, 1);
+		} else {
+			SSD1306_Puts("Ready", &Font_11x18, 1);
+		}
 	}
+
 
 	SSD1306_GotoXY(10, 30);
 

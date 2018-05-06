@@ -137,4 +137,11 @@
 #define FV_PWROUTPORT GPIOB
 
 
+/*
+ * OTG Enable
+ */
+
+#define FV_OTGENABLEPIN GPIO_PIN_1
+#define FV_OTGENABLEPORT GPIOB
+
 #endif /* CONFIG_HAL_H_ */

@@ -12,7 +12,7 @@
 
 #ifndef I2CHELPER_H_
 #define I2CHELPER_H_
-#include "config.h"
+#include "../Src/config.h"
 
 typedef struct
  {

@@ -15,7 +15,7 @@ extern "C" {
 #endif
 */
 
-#include "config.h"
+#include "../Src/config.h"
 
 /**
  * @defgroup SD_MPU6050_Macros

@@ -10,7 +10,7 @@
 
 #ifndef NMEA_H_
 #define NMEA_H_
-#include "config.h"
+#include "../Src/config.h"
 
 void NMEA_setPTAS1(double vario, double varioAv, double altitude);
 void NMEA_setnmeaShortLXWP0(float varioAlt, float varioMts);

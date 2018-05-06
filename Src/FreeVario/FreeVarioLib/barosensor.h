@@ -11,8 +11,8 @@
 
 #ifndef BAROSENSOR_H_
 #define BAROSENSOR_H_
-#include "config.h"
 #include "ms5611.h"
+#include "../Src/config.h"
 
 extern int32_t realPressureAv;
 

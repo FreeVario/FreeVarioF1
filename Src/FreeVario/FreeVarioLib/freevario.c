@@ -126,18 +126,25 @@ void run1000() {
  */
 
 void runOnce(){
+#ifdef BUZZERSTARTUPSOUND
 	resetTone();
+#endif
+
+#ifdef FV_OTGENABLEPIN
+	HAL_GPIO_WritePin(FV_OTGENABLEPORT,FV_OTGENABLEPIN,GPIO_PIN_RESET);
+#endif
 
 }
 
 
 void setup() {
 	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
+
 	BGPIO_Setup();
 	setupSendData();
 #ifdef FV_OLEDI2C
 	DISP_Setup();
-	DISP_SetMode(DISPVARIODATA);
+	DISP_SetMode(DISPPOWERDATA);
 #endif
 	showStartUP();
 	setupConfig();
@@ -145,7 +152,9 @@ void setup() {
 //TODO: add macro defines
 	AUDIO_Setup_Tone();
 	if (!HAL_GPIO_ReadPin(FV_BRNPRT, FV_BTNPREV)) {
+#ifdef BUZZERSTARTUPSOUND
 		StartupTone();
+#endif
 	}
 	BARO_Setup();
 	ACCL_Setup();

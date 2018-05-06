@@ -11,7 +11,7 @@
 
 #ifndef ACCELEROMETER_H_
 #define ACCELEROMETER_H_
-#include "config.h"
+#include "../Src/config.h"
 void ACCL_Setup();
 void ACCL_Read();
 

@@ -11,7 +11,7 @@
 
 #ifndef SENDDATA_H_
 #define SENDDATA_H_
-#include "config.h"
+#include "../Src/config.h"
 
 void strBTCat(char * stradd);
 

@@ -66,9 +66,9 @@ void readBatVoltage() {
 			//double vbat = (double)( (cnv * 2 * 3300) / 0xfff)/1000;
 			//TODO: figure out the conversion, check for power draining due to measurement
 			if(vbat < 2) {
-				vbat = cnv/236;
+				vbat = cnv/200;
 			}else{
-		       vbat = (double) ((vbat * 10) + (cnv/236))/11; //just an estimated value.
+		       vbat = (double) ((vbat * 10) + (cnv/200))/11; //just an estimated value.
 			}
 
 

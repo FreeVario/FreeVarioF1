@@ -38,7 +38,7 @@ extern C {
  *  - 11 x 18 pixels
  *  - 16 x 26 pixels
  */
-#include "config.h"
+#include "../Src/config.h"
 #include "string.h"
 
 /**

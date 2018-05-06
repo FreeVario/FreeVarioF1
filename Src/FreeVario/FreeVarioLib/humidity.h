@@ -11,7 +11,7 @@
 
 #ifndef HUMIDITY_H_
 #define HUMIDITY_H_
-#include "config.h"
+#include "../Src/config.h"
 
 void HUMID_Setup();
 void HUMID_Read();

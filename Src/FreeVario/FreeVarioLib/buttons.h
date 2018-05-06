@@ -10,7 +10,7 @@
 
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
-#include "config.h"
+#include "../Src/config.h"
 
 
 void BTN_Setup();

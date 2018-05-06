@@ -11,7 +11,7 @@
 
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
-#include "config.h"
+#include "../Src/config.h"
 
 #define DISPPOWERDATA 0
 #define DISPVARIODATA 1

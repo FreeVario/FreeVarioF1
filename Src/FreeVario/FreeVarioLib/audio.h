@@ -10,7 +10,7 @@
 
 #ifndef AUDIO_H_
 #define AUDIO_H_
-#include "config.h"
+#include "../Src/config.h"
 
 
 void makeVarioAudio(float vario);

@@ -11,7 +11,7 @@
 
 #ifndef BOARDGPIO_H_
 #define BOARDGPIO_H_
-#include "config.h"
+#include "../Src/config.h"
 
 void BGPIO_Setup();
 void BGPIO_Read();
