@@ -12,7 +12,7 @@
 
 #include "accelerometer.h"
 #include "sd_hal_mpu6050.h"
-
+#ifdef ACCL
 SD_MPU6050 mpu1;
 
 extern float accel_x;
@@ -46,3 +46,4 @@ void ACCL_Read() {
 
 }
 
+#endif

@@ -22,7 +22,7 @@
 
 //#define SETUPBT
 
-#define INTERVALPWB  //enable the powerbank in inerval mode
+//#define INTERVALPWB  //enable the powerbank in inerval mode
 
 #define VARIO
 #define VARIO2
@@ -31,12 +31,14 @@
 #define ACCL
 #define ACCLSMOOTH 10 //Lowpass filter level
 #define HUMID //enable humid sensor
+#define BGPIO //enable onboard gpio functions
 
 //#define BUZZERDAC //use the DAC output
 #define STARTDELAY 6000 //the time delay before the process starts
 #define TAKEOFFVARIO 0.8 //0.4 //abs vario level to detect takeoff
 #define BUZZERZEROCLIMB -0.3 // Normal sink rate for glider is -0.9 m/s. At this value up to 0 m/s a "blip" sound is made
 //#define BUZZERSTARTUPSOUND // beep when starting up
+#define BUZZER //enble the buzzer function
 #define BUZZSINKALERT -2 //Alert if sinking harder than normal (not sink alarm)
 #define BUZZSINKALERTPAUSE 8000 //pause length in between alerts
 #define BUZZERVARIOSTOP 10000 //time vario STOP making noise when climbrate 0 m/s

@@ -9,7 +9,7 @@
 */
 
 #include "stackops.h"
-
+#include <stdlib.h>
 
 void SO_setQueue(Queue_t *queue, int capacity){
 
@@ -17,7 +17,7 @@ void SO_setQueue(Queue_t *queue, int capacity){
     queue->front = queue->size = 0;
     queue->rear = capacity - 1;
     queue->array = (float*) malloc(queue->capacity * sizeof(float));
-    return queue;
+
 }
 
 // Queue is full when size becomes equal to the capacity

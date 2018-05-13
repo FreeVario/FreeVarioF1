@@ -114,7 +114,7 @@ void showWeatherData(){
 void showPowerData(){
 
 
-
+#ifdef FV_PWROUTPORT
 	char vals[33];
 	SSD1306_GotoXY(10, 10);  // goto 10, 10
 	if (HAL_GPIO_ReadPin(FV_PWROUTPORT, FV_PWROUTPIN) == GPIO_PIN_SET) {
@@ -136,6 +136,6 @@ void showPowerData(){
 	SSD1306_Puts(vals, &Font_11x18, 1);
 
 	SSD1306_UpdateScreen();
-
+#endif
 
 }

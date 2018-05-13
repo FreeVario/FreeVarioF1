@@ -19,12 +19,16 @@ extern I2C_HandleTypeDef FV_I2C1;
 #ifdef FV_I2C2
 extern I2C_HandleTypeDef FV_I2C2;
 #endif
+#ifdef FV_UARTGPS
 extern UART_HandleTypeDef FV_UARTGPS;
+#endif
+#ifdef FV_UARTBT
 extern UART_HandleTypeDef FV_UARTBT;
+#endif
 extern IWDG_HandleTypeDef FV_IWDG;
 
 //DHT TIMER
-extern TIM_HandleTypeDef FV_DHTTIMER;
+//extern TIM_HandleTypeDef FV_DHTTIMER;
 
 float currentVarioMPS; // ft/s
 float cuttentVarioAvMPS;

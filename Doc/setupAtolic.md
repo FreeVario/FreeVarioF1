@@ -32,7 +32,7 @@ Open usb_device.c
 Add in void MX_USB_DEVICE_Init(void) -> 
 
   /* USER CODE BEGIN USB_DEVICE_Init_PreTreatment */
-          //This will make a device see think that the USB device has reconnected
+          //This will make a device think that the USB device has reconnected
           //Usefull for Android
 	  GPIO_InitTypeDef GPIO_InitS;
 	  GPIO_InitS.Pin = GPIO_PIN_12;
@@ -44,13 +44,13 @@ Add in void MX_USB_DEVICE_Init(void) ->
 	  HAL_Delay(300);
   /* USER CODE END USB_DEVICE_Init_PreTreatment */
 
-Configure config_hal.h if needed
+Configure config_hal.h and config.h if needed
 Build project 
 
 Rules:
 
 Only use the FreeVarioLib for development.
-Do not include main.c or config_hal.h 
+Do not include main.c, config_hal.h or config.h or any STM32 hal files
 
 You have to add -u _printf_float to the c linker for Sprintf to work with floats
 See: http://www.openstm32.org/forumthread954

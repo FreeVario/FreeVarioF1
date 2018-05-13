@@ -36,7 +36,7 @@ uint8_t sensorToken = 0;
 uint8_t dataValid=1;
 uint8_t hasrunonce=0;
 
-
+#ifdef FV_UARTGPS
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
 	memcpy(&transferBuffer, &receiveBuffer, sizeof( receiveBuffer));
@@ -50,6 +50,7 @@ void HAL_UART_DMARxHalfCplt(UART_HandleTypeDef *UartHandle)
 
 	gpsdata =1;
 }
+#endif
 
 //Called from main.c
 void FV_Run(){
@@ -61,21 +62,25 @@ void FV_Run(){
 
 //fast loop
 void run10() {
+#ifdef FV_BRNPRT
 	BTN_Read();
+#endif
 	sensorToken++;
 	switch(sensorToken) {
 	case 1:
-#if defined(VARIO)
+#ifdef VARIO
 		Baro_Read();
 #endif
 		break;
 	case 2:
-#if defined(ACCL)
+#ifdef ACCL
 		ACCL_Read();
 #endif
 		break;
 	case 3:
+#ifdef BUZZER
 		if (takeoff) makeVarioAudio((float)currentVarioMPS);
+#endif
 		break;
 	}
 	if (sensorToken >= 3) {
@@ -104,7 +109,9 @@ void run200() {
 //slow loop
 void run1000() {
 	if (startwaitcomplete && dataValid) {
+#ifdef BGPIO
 		BGPIO_Read(); //must happen before display update and per second
+#endif
 #ifdef FV_OLEDI2C
 		DISP_Update();
 #endif
@@ -115,9 +122,9 @@ void run1000() {
 #if defined(TESTBUZZER)
 			AUDIO_TestToneCall();
 #endif
-
+#ifdef FV_LED
 			HAL_GPIO_TogglePin(FV_LED_GPIO, FV_LED);
-
+#endif
 }
 
 /*
@@ -138,27 +145,37 @@ void runOnce(){
 
 
 void setup() {
+#ifdef FV_UARTGPS
 	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
-
+#endif
+#ifdef BGPIO
 	BGPIO_Setup();
+#endif
 	setupSendData();
 #ifdef FV_OLEDI2C
 	DISP_Setup();
 	DISP_SetMode(DISPPOWERDATA);
-#endif
 	showStartUP();
+#endif
+
 	setupConfig();
 
-//TODO: add macro defines
+#ifdef BUZZER
 	AUDIO_Setup_Tone();
-	if (!HAL_GPIO_ReadPin(FV_BRNPRT, FV_BTNPREV)) {
 #ifdef BUZZERSTARTUPSOUND
 		StartupTone();
 #endif
-	}
+#endif
+
+#ifdef VARIO
 	BARO_Setup();
+#endif
+#ifdef ACCL
 	ACCL_Setup();
+#endif
+#ifdef HUMID
 	HUMID_Setup();
+#endif
 	HAL_Delay(100);
 	startTime = HAL_GetTick();
 

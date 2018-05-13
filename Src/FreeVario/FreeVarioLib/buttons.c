@@ -30,7 +30,7 @@ void BTN_Setup() {
  * This way the GPS stay locked.
  */
 void BTN_Read() {
-
+#ifdef FV_BTNOPTION
 	if (optionbt) {
 		if (HAL_GPIO_ReadPin(FV_BRNPRT, FV_BTNOPTION)) {
 			if (HAL_GetTick() > optbtndelay + BUTTONDELAY) {
@@ -40,22 +40,24 @@ void BTN_Read() {
 		}
 	}
 
-
+#endif
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-
+#ifdef FV_BTNOPTION
 	if(GPIO_Pin==FV_BTNOPTION) {
 		optbtndelay=HAL_GetTick();
 		optionbt=1;
 	}
-
+#endif
+#ifdef FV_BTNNEXT
 	if(GPIO_Pin==FV_BTNNEXT) {
 		DISP_NextMode();
 	}
-
+#endif
+#ifdef FV_BTNPREV
 	if(GPIO_Pin==FV_BTNPREV) {
 		DISP_PrevMode();
 	}
-
+#endif
 }

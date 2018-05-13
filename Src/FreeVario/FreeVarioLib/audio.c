@@ -9,7 +9,7 @@
 */
 
 #include "audio.h"
-
+#ifdef BUZZER
 
 float step=0;
 float vario_s=0;
@@ -317,4 +317,4 @@ void AUDIO_TestToneCall(){
 
 }
 
-
+#endif

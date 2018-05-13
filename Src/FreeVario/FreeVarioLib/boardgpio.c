@@ -13,6 +13,7 @@
  */
 
 #include "boardgpio.h"
+#ifdef BGPIO
 
 #define CHARGEINTERVALOFF 300
 #define CHARGEINTERVALON  60
@@ -105,4 +106,4 @@ void togglePowerBankFunction() {
 	HAL_GPIO_TogglePin(FV_PWROUTPORT,FV_PWROUTPIN);
 }
 
-
+#endif
