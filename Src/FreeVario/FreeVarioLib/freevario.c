@@ -145,6 +145,13 @@ void runOnce(){
 
 
 void setup() {
+
+#if defined FV_OTGENABLEPIN && defined NOOTGDELAY
+	if (HAL_GPIO_ReadPin(FV_BRNPRT, FV_BTNOPTION) == GPIO_PIN_RESET) {
+		HAL_GPIO_WritePin(FV_OTGENABLEPORT,FV_OTGENABLEPIN,GPIO_PIN_RESET);
+
+	}
+#endif
 #ifdef FV_UARTGPS
 	HAL_UART_Receive_DMA(&FV_UARTGPS, (uint8_t *)receiveBuffer, GPSDMABUFFER);
 #endif

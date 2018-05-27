@@ -23,6 +23,7 @@
 //#define SETUPBT
 
 //#define INTERVALPWB  //enable the powerbank in inerval mode
+#define NOOTGDELAY //Don't delay the OTG cable (this way some devices won't see it as a powerbank)
 
 #define VARIO
 #define VARIO2
