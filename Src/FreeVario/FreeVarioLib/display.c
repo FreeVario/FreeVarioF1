@@ -13,6 +13,7 @@
 
 int8_t dispmode=0;
 uint8_t refreshcount=0;
+uint32_t sleeptime=0;
 extern double vbat;
 extern uint8_t ischarging;
 extern uint8_t ischarged;
@@ -33,6 +34,11 @@ void DISP_Refresh() {
 
 }
 
+void resetSleepTimer(){
+	sleeptime = HAL_GetTick();
+	SSD1306_ON();
+}
+
 void DISP_Update(){
 	refreshcount++;
 	if (refreshcount > 10) {
@@ -50,6 +56,13 @@ void DISP_Update(){
 		showWeatherData();
 		break;
 	}
+
+#ifdef DISPLAYSLEEP
+	if (HAL_GetTick() - sleeptime > DISPLAYSLEEP * 1000) {
+		SSD1306_OFF();
+	}
+
+#endif
 
 }
 

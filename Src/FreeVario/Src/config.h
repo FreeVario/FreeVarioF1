@@ -25,6 +25,8 @@
 //#define INTERVALPWB  //enable the powerbank in inerval mode
 #define NOOTGDELAY //Don't delay the OTG cable (this way some devices won't see it as a powerbank)
 
+#define DISPLAYSLEEP 30 // save power by clearing the OLED display
+
 #define VARIO
 #define VARIO2
 #define VARIO2LEASTDEV  //use least deviation method

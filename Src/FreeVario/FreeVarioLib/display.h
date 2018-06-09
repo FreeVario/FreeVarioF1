@@ -21,6 +21,7 @@
 
 void DISP_Setup();
 void DISP_Refresh();
+void resetSleepTimer();
 void DISP_Update();
 void showStartUP();
 void DISP_SetMode(uint8_t mode);

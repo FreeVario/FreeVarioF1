@@ -44,6 +44,7 @@ void BTN_Read() {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	resetSleepTimer();
 #ifdef FV_BTNOPTION
 	if(GPIO_Pin==FV_BTNOPTION) {
 		optbtndelay=HAL_GetTick();
