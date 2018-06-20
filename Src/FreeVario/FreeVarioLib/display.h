@@ -21,6 +21,7 @@
 
 void DISP_Setup();
 void DISP_Refresh();
+void UpdateScreen();
 void resetSleepTimer();
 void DISP_Update();
 void showStartUP();

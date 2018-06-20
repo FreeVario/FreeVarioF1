@@ -258,7 +258,8 @@ void ssd1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data);
  */
 void ssd1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t *data, uint16_t count);
 
-
+void SSD1306_ON(void);
+void SSD1306_OFF(void);
 
 /* C++ detection */
 #ifdef __cplusplus

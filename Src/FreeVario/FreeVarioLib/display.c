@@ -17,6 +17,7 @@ uint32_t sleeptime=0;
 extern double vbat;
 extern uint8_t ischarging;
 extern uint8_t ischarged;
+uint8_t isDisplayOn=1;
 
 
 void DISP_Setup(){
@@ -24,19 +25,28 @@ void DISP_Setup(){
     SSD1306_Fill (0);  // fill the display with black color
 	SSD1306_UpdateScreen(); // update screen
 
-
 }
 
 void DISP_Refresh() {
+
 	SSD1306_Fill(0);  //not needed if only characters replaced
-	SSD1306_UpdateScreen();
+	UpdateScreen();
 	refreshcount = 0;
 
 }
 
-void resetSleepTimer(){
+void UpdateScreen() { //extra layer for power saving
+	if (isDisplayOn) {
+		SSD1306_UpdateScreen();
+	}
+
+
+}
+
+void resetSleepTimer(){ //called by buttons.c
 	sleeptime = HAL_GetTick();
 	SSD1306_ON();
+	isDisplayOn=1;
 }
 
 void DISP_Update(){
@@ -60,6 +70,7 @@ void DISP_Update(){
 #ifdef DISPLAYSLEEP
 	if (HAL_GetTick() - sleeptime > DISPLAYSLEEP * 1000) {
 		SSD1306_OFF();
+		isDisplayOn=0;
 	}
 
 #endif
@@ -97,18 +108,18 @@ void showVarioData(){
 		SSD1306_GotoXY (10, 30);
 		 sprintf(vals,"%05.2f m",currentAltitudeMtr);
 		SSD1306_Puts (vals, &Font_11x18, 1);
-		SSD1306_UpdateScreen(); // update screen
+		UpdateScreen(); // update screen
 
 }
 
 void showStartUP() {
 	SSD1306_Fill(0);
-	SSD1306_UpdateScreen();
+	UpdateScreen();
 
 	SSD1306_GotoXY (10,10);  // goto 10, 10
 
 	SSD1306_Puts ("Starting..", &Font_11x18, 1);  // print Hello
-	SSD1306_UpdateScreen(); // update screen
+	UpdateScreen(); // update screen
 }
 
 void showWeatherData(){
@@ -119,7 +130,7 @@ void showWeatherData(){
 	SSD1306_GotoXY (10, 30);
 	 sprintf(vals,"%02.1f%% %02.fC",humidity,humidtemp);
 	SSD1306_Puts (vals, &Font_11x18, 1);
-	SSD1306_UpdateScreen(); // update screen
+	UpdateScreen(); // update screen
 
 
 }
@@ -148,7 +159,7 @@ void showPowerData(){
 	sprintf(vals, "%2.2fV %d%%", vbat,pbat);
 	SSD1306_Puts(vals, &Font_11x18, 1);
 
-	SSD1306_UpdateScreen();
+	UpdateScreen();
 #endif
 
 }
